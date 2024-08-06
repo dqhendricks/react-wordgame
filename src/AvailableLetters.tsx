@@ -1,4 +1,4 @@
-import type { GameState, AvailableLetterData, Action } from "./types.ts";
+import type { GameState, AvailableLetter, Action } from "./types.ts";
 import styles from "./game.module.css";
 
 interface AvailableLettersProps {
@@ -12,7 +12,7 @@ export default function AvailableLetters({
   availableLetters,
   dispatch,
 }: AvailableLettersProps) {
-  function handleClick(selectedLetter: AvailableLetterData) {
+  function handleClick(selectedLetter: AvailableLetter) {
     if (loading || selectedLetter.disabled) return;
     dispatch({
       type: "SELECT_LETTER",
@@ -22,17 +22,17 @@ export default function AvailableLetters({
 
   return (
     <div className="flex gap-3 m-auto">
-      {availableLetters.map((availableLetterData) => (
+      {availableLetters.map((availableLetter) => (
         <button
-          key={availableLetterData.id}
+          key={availableLetter.id}
           className={`${styles.tile} ${
-            availableLetterData.disabled
+            availableLetter.disabled
               ? styles.disabled
               : `${styles.shown} ${styles.available}`
           }`}
-          onClick={() => handleClick(availableLetterData)}
+          onClick={() => handleClick(availableLetter)}
         >
-          {availableLetterData.letter}
+          {availableLetter.letter}
         </button>
       ))}
     </div>

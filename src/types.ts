@@ -4,7 +4,7 @@ export interface WordData {
   word: string;
   startX: number;
   startY: number;
-  orientation: "x" | "y";
+  orientation: "x" | "y"; // left-right/up-down
 }
 
 export interface StageData {
@@ -28,17 +28,23 @@ export interface Animation {
   variants?: Variants;
 }
 
-export interface SelectedLetterData {
+export interface selectedLettersData {
+  currentSlotIndex: number; // used to determine next selected letter slot to populate
+  animation?: Animation; // letters container animation (also used to stagger children)
+  dispatchOnAnimationComplete?: Action;
+}
+
+export interface SelectedLetter {
   id: string;
   availableLetterId: string | null;
   status: TileStatus;
   letter: string;
   ref: React.RefObject<HTMLDivElement>; // to get position data for animation
-  animation?: Animation;
+  animation?: Animation; // individual letter animation
   dispatchOnAnimationComplete?: Action;
 }
 
-export interface AvailableLetterData {
+export interface AvailableLetter {
   id: string;
   letter: string;
   disabled: boolean;
@@ -49,9 +55,9 @@ export interface GameState {
   currentStage: number;
   currentStageData: StageData;
   gameGrid: CellData[][];
-  currentSelectedLetterIndex: number; // used to determining next selected letter slot to populate
-  selectedLetters: SelectedLetterData[];
-  availableLetters: AvailableLetterData[];
+  selectedLettersData: selectedLettersData;
+  selectedLetters: SelectedLetter[];
+  availableLetters: AvailableLetter[];
 }
 
 export interface Position {
@@ -66,7 +72,7 @@ export interface LoadStageAction {
 
 export interface SelectLetterAction {
   type: "SELECT_LETTER";
-  payload: AvailableLetterData;
+  payload: AvailableLetter;
 }
 
 export interface ClearSelectedLettersAction {

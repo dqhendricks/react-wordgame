@@ -10,7 +10,7 @@ function App() {
       currentStage,
       currentStageData,
       gameGrid,
-      currentSelectedLetterIndex,
+      selectedLettersData,
       selectedLetters,
       availableLetters,
     },
@@ -26,7 +26,7 @@ function App() {
       />
       <SelectedLetters
         loading={loading}
-        currentSelectedLetterIndex={currentSelectedLetterIndex}
+        selectedLettersData={selectedLettersData}
         selectedLetters={selectedLetters}
         dispatch={dispatch}
       />

@@ -4,8 +4,8 @@ import type {
   GameState,
   Action,
   CellData,
-  SelectedLetterData,
-  AvailableLetterData,
+  SelectedLetter,
+  AvailableLetter,
 } from "./types.ts";
 import { stageData } from "./assets/stageData.ts";
 import * as Animations from "./utils/framerAnimations.ts";
@@ -45,8 +45,8 @@ function gameStateReducerInit(currentStage: number): GameState {
       }
     }
   });
-  // initialize selected letter data
-  const currentSelectedLetterIndex = 0;
+  // initialize selected letters data
+  const selectedLettersData = { currentSlotIndex: 0 };
   const selectedLetters: GameState["selectedLetters"] = Array.from(
     { length: currentStageData.letters.length },
     () => ({
@@ -70,7 +70,7 @@ function gameStateReducerInit(currentStage: number): GameState {
     currentStage,
     currentStageData,
     gameGrid,
-    currentSelectedLetterIndex,
+    selectedLettersData,
     selectedLetters,
     availableLetters,
   };
@@ -85,14 +85,15 @@ function gameStateReducer(state: GameState, action: Action) {
 
     case "SELECT_LETTER": {
       const selectedAvailableLetter = action.payload;
+      const currentSlotIndex = state.selectedLettersData.currentSlotIndex;
       // disable selected available letter
-      const updatedSelectedAvailableLetter: AvailableLetterData = {
+      const updatedSelectedAvailableLetter: AvailableLetter = {
         ...action.payload,
         disabled: true,
       };
       // create selected letter update object
       const selectedLetterUpdate: Pick<
-        SelectedLetterData,
+        SelectedLetter,
         "availableLetterId" | "status" | "letter" | "animation"
       > = {
         availableLetterId: updatedSelectedAvailableLetter.id,
@@ -108,9 +109,12 @@ function gameStateReducer(state: GameState, action: Action) {
             ? updatedSelectedAvailableLetter
             : availableLetter
         ),
-        currentSelectedLetterIndex: state.currentSelectedLetterIndex + 1,
+        selectedLettersData: {
+          ...state.selectedLettersData,
+          currentSlotIndex: currentSlotIndex + 1,
+        },
         selectedLetters: state.selectedLetters.map((selectedLetter, index) =>
-          index === state.currentSelectedLetterIndex
+          index === currentSlotIndex
             ? { ...selectedLetter, ...selectedLetterUpdate }
             : selectedLetter
         ),

@@ -2,49 +2,61 @@ import { motion } from "framer-motion";
 
 import type { GameState, Action } from "./types.ts";
 import styles from "./game.module.css";
-import * as Animations from "./utils/framerAnimations.ts";
 
 interface SelectedLettersProps {
   loading: GameState["loading"];
-  currentSelectedLetterIndex: GameState["currentSelectedLetterIndex"];
+  selectedLettersData: GameState["selectedLettersData"];
   selectedLetters: GameState["selectedLetters"];
   dispatch: React.Dispatch<Action>;
 }
 
 export default function SelectedLetters({
   loading,
-  currentSelectedLetterIndex,
+  selectedLettersData,
   selectedLetters,
   dispatch,
 }: SelectedLettersProps) {
-  const buttonsEnabled = !loading && currentSelectedLetterIndex >= 3;
+  const {
+    currentSlotIndex,
+    animation: containerAnimation = undefined,
+    dispatchOnAnimationComplete = undefined,
+  } = selectedLettersData;
+  const buttonsEnabled = !loading && currentSlotIndex >= 3;
 
-  function animationCompleteHandler(
+  function letterAnimationCompleteHandler(
     dispatchOnAnimationComplete: Action | undefined
   ) {
     if (dispatchOnAnimationComplete) dispatch(dispatchOnAnimationComplete);
   }
 
+  function containerAnimationCompleteHandler() {
+    if (dispatchOnAnimationComplete) dispatch(dispatchOnAnimationComplete);
+  }
+
   return (
-    <div className="flex gap-7 pb-5 pt-7">
-      <motion.div className="flex gap-3" {...Animations.staggerChildren}>
-        {selectedLetters.map((selectedLetterData, index) => (
+    <motion.div
+      className="flex gap-7 pb-5 pt-7"
+      {...containerAnimation}
+      onAnimationComplete={containerAnimationCompleteHandler}
+    >
+      <div className="flex gap-3">
+        {selectedLetters.map((selectedLetter, index) => (
           <div key={index} className="pb-2 border-b-2 border-b-slate-200">
             <motion.div
-              className={`${styles.tile} ${styles[selectedLetterData.status]}`}
-              ref={selectedLetterData.ref}
-              {...selectedLetterData?.animation}
+              className={`${styles.tile} ${styles[selectedLetter.status]}`}
+              ref={selectedLetter.ref}
+              {...selectedLetter?.animation}
               onAnimationComplete={() =>
-                animationCompleteHandler(
-                  selectedLetterData?.dispatchOnAnimationComplete
+                letterAnimationCompleteHandler(
+                  selectedLetter?.dispatchOnAnimationComplete
                 )
               }
             >
-              {selectedLetterData.letter}
+              {selectedLetter.letter}
             </motion.div>
           </div>
         ))}
-      </motion.div>
+      </div>
       <div className="flex gap-3">
         <button
           className={`${styles.tile} ${
@@ -61,6 +73,6 @@ export default function SelectedLetters({
           X
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 }
