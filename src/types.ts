@@ -1,5 +1,3 @@
-import type { TargetAndTransition, Target, Variants } from "framer-motion";
-
 export interface WordData {
   word: string;
   startX: number;
@@ -22,25 +20,18 @@ export interface CellData {
   ref?: React.RefObject<HTMLDivElement>; // to get position data for animation
 }
 
-export interface Animation {
-  initial?: Target | string;
-  animate?: TargetAndTransition | string;
-  variants?: Variants;
-}
-
-export interface selectedLettersData {
+export interface SelectedLettersData {
   currentSlotIndex: number; // used to determine next selected letter slot to populate
-  animation?: Animation; // letters container animation (also used to stagger children)
+  animateVariant?: string;
   dispatchOnAnimationComplete?: Action;
 }
 
 export interface SelectedLetter {
   id: string;
-  availableLetterId: string | null;
   status: TileStatus;
   letter: string;
   ref: React.RefObject<HTMLDivElement>; // to get position data for animation
-  animation?: Animation; // individual letter animation
+  animateVariant?: string;
   dispatchOnAnimationComplete?: Action;
 }
 
@@ -55,7 +46,7 @@ export interface GameState {
   currentStage: number;
   currentStageData: StageData;
   gameGrid: CellData[][];
-  selectedLettersData: selectedLettersData;
+  selectedLettersData: SelectedLettersData;
   selectedLetters: SelectedLetter[];
   availableLetters: AvailableLetter[];
 }
@@ -80,7 +71,19 @@ export interface ClearSelectedLettersAction {
   payload: null;
 }
 
+export interface SetSelectedLetterHiddenAction {
+  type: "SET_SELECTED_LETTER_HIDDEN";
+  payload: SelectedLetter["id"];
+}
+
+export interface EnableAvailableLettersAction {
+  type: "ENABLE_AVAILABLE_LETTERS";
+  payload: null;
+}
+
 export type Action =
   | LoadStageAction
   | SelectLetterAction
-  | ClearSelectedLettersAction;
+  | ClearSelectedLettersAction
+  | SetSelectedLetterHiddenAction
+  | EnableAvailableLettersAction;

@@ -1,5 +1,5 @@
-import type { GameState, AvailableLetter, Action } from "./types.ts";
-import styles from "./game.module.css";
+import type { GameState, AvailableLetter, Action } from "../types.ts";
+import styles from "../game.module.css";
 
 interface AvailableLettersProps {
   loading: GameState["loading"];

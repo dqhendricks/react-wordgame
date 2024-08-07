@@ -1,7 +1,7 @@
 import { useGameStateReducer } from "./useGameStateReducer.ts";
-import GameGrid from "./GameGrid.tsx";
-import SelectedLetters from "./SelectedLetters.tsx";
-import AvailableLetters from "./AvailableLetters.tsx";
+import GameGrid from "./components/GameGrid.tsx";
+import SelectedLetters from "./components/SelectedLetters.tsx";
+import AvailableLetters from "./components/AvailableLetters.tsx";
 
 function App() {
   const [

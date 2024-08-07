@@ -1,0 +1,41 @@
+import type { GameState, Action } from "../types.ts";
+import styles from "../game.module.css";
+
+interface SelectedLettersButtonsProps {
+  loading: GameState["loading"];
+  currentSlotIndex: GameState["selectedLettersData"]["currentSlotIndex"];
+  dispatch: React.Dispatch<Action>;
+}
+
+export default function SelectedLettersButtons({
+  loading,
+  currentSlotIndex,
+  dispatch,
+}: SelectedLettersButtonsProps) {
+  const submitButtonEnabled = !loading && currentSlotIndex >= 3;
+  const clearButtonEnabled = !loading && currentSlotIndex > 0;
+
+  function clearSelectedLettersHandler() {
+    dispatch({ type: "CLEAR_SELECTED_LETTERS", payload: null });
+  }
+
+  return (
+    <div className="flex gap-3">
+      <button
+        className={`${styles.tile} ${
+          submitButtonEnabled ? styles.accept : styles.disabled
+        }`}
+      >
+        ✓
+      </button>
+      <button
+        className={`${styles.tile} ${
+          clearButtonEnabled ? styles.reject : styles.disabled
+        }`}
+        onClick={clearSelectedLettersHandler}
+      >
+        X
+      </button>
+    </div>
+  );
+}

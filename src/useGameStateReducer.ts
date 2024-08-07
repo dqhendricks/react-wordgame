@@ -8,7 +8,6 @@ import type {
   AvailableLetter,
 } from "./types.ts";
 import { stageData } from "./assets/stageData.ts";
-import * as Animations from "./utils/framerAnimations.ts";
 
 function generateId() {
   return Math.random().toString();
@@ -46,15 +45,15 @@ function gameStateReducerInit(currentStage: number): GameState {
     }
   });
   // initialize selected letters data
-  const selectedLettersData = { currentSlotIndex: 0 };
+  const selectedLettersData = { currentSlotIndex: 0, animateVariant: "" };
   const selectedLetters: GameState["selectedLetters"] = Array.from(
     { length: currentStageData.letters.length },
     () => ({
       id: generateId(),
-      availableLetterId: null,
       status: "hidden",
       letter: "",
       ref: React.createRef<HTMLDivElement>(),
+      animateVariant: "", // need to set this initially or onAnimationComplete gets wonky
     })
   );
   // initialize available letter data
@@ -76,7 +75,7 @@ function gameStateReducerInit(currentStage: number): GameState {
   };
 }
 
-function gameStateReducer(state: GameState, action: Action) {
+function gameStateReducer(state: GameState, action: Action): GameState {
   switch (action.type) {
     case "LOAD_STAGE": {
       const stage = action.payload;
@@ -94,21 +93,16 @@ function gameStateReducer(state: GameState, action: Action) {
       // create selected letter update object
       const selectedLetterUpdate: Pick<
         SelectedLetter,
-        "availableLetterId" | "status" | "letter" | "animation"
+        "status" | "letter" | "animateVariant" | "dispatchOnAnimationComplete"
       > = {
-        availableLetterId: updatedSelectedAvailableLetter.id,
         status: "shown",
         letter: updatedSelectedAvailableLetter.letter,
-        animation: Animations.hiddenToShown,
+        animateVariant: "hiddenToshown",
+        dispatchOnAnimationComplete: undefined,
       };
       // update state
       return {
         ...state,
-        availableLetters: state.availableLetters.map((availableLetter) =>
-          availableLetter.id === selectedAvailableLetter.id
-            ? updatedSelectedAvailableLetter
-            : availableLetter
-        ),
         selectedLettersData: {
           ...state.selectedLettersData,
           currentSlotIndex: currentSlotIndex + 1,
@@ -118,6 +112,72 @@ function gameStateReducer(state: GameState, action: Action) {
             ? { ...selectedLetter, ...selectedLetterUpdate }
             : selectedLetter
         ),
+        availableLetters: state.availableLetters.map((availableLetter) =>
+          availableLetter.id === selectedAvailableLetter.id
+            ? updatedSelectedAvailableLetter
+            : availableLetter
+        ),
+      };
+    }
+
+    case "CLEAR_SELECTED_LETTERS": {
+      // update state
+      return {
+        ...state,
+        loading: true,
+        selectedLettersData: {
+          currentSlotIndex: 0,
+          animateVariant: "waitForClearSelected",
+          dispatchOnAnimationComplete: {
+            type: "ENABLE_AVAILABLE_LETTERS",
+            payload: null,
+          },
+        },
+        selectedLetters: state.selectedLetters.map((selectedLetter) =>
+          selectedLetter.status === "shown"
+            ? {
+                ...selectedLetter,
+                animateVariant: "hideShown",
+                dispatchOnAnimationComplete: {
+                  type: "SET_SELECTED_LETTER_HIDDEN",
+                  payload: selectedLetter.id,
+                },
+              }
+            : selectedLetter
+        ),
+      };
+    }
+
+    case "SET_SELECTED_LETTER_HIDDEN": {
+      const selectedLetterId: SelectedLetter["id"] = action.payload;
+      return {
+        ...state,
+        selectedLetters: state.selectedLetters.map((selectedLetter) => {
+          return selectedLetter.id === selectedLetterId
+            ? {
+                ...selectedLetter,
+                letter: "",
+                status: "hidden",
+                animateVariant: "showHidden",
+              }
+            : selectedLetter;
+        }),
+      };
+    }
+
+    case "ENABLE_AVAILABLE_LETTERS": {
+      return {
+        ...state,
+        loading: false,
+        selectedLettersData: {
+          ...state.selectedLettersData,
+          animateVariant: "",
+          dispatchOnAnimationComplete: undefined,
+        },
+        availableLetters: state.availableLetters.map((availableLetter) => ({
+          ...availableLetter,
+          disabled: false,
+        })),
       };
     }
 

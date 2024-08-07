@@ -1,5 +1,5 @@
-import type { GameState, StageData } from "./types.ts";
-import styles from "./game.module.css";
+import type { GameState, StageData } from "../types.ts";
+import styles from "../game.module.css";
 
 interface GameGridProps {
   gameGrid: GameState["gameGrid"];
