@@ -14,10 +14,10 @@ export default function GameGrid({ gameGrid, columnCount }: GameGridProps) {
         gridTemplateColumns: `repeat(${columnCount}, minmax(0, 1fr))`,
       }}
     >
-      {gameGrid.map((row, rowIndex) =>
-        row.map((cellData, columnIndex) => (
+      {gameGrid.map((row) =>
+        row.map((cellData) => (
           <div
-            key={`${rowIndex}-${columnIndex}`}
+            key={cellData.id}
             className={`${styles.tile} ${styles[cellData.status]}`}
           >
             <strong>

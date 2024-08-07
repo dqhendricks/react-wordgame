@@ -15,28 +15,31 @@ export interface StageData {
 type TileStatus = "shown" | "hidden" | "empty";
 
 export interface CellData {
+  id: number;
   status: TileStatus;
   letter: string;
-  ref?: React.RefObject<HTMLDivElement>; // to get position data for animation
+  ref?: React.RefObject<HTMLDivElement>; // to get position data for animations
+  animateVariant: string;
+  dispatchOnAnimationComplete?: Action;
 }
 
 export interface SelectedLettersData {
   currentSlotIndex: number; // used to determine next selected letter slot to populate
-  animateVariant?: string;
+  animateVariant: string;
   dispatchOnAnimationComplete?: Action;
 }
 
 export interface SelectedLetter {
-  id: string;
+  id: number;
   status: TileStatus;
   letter: string;
   ref: React.RefObject<HTMLDivElement>; // to get position data for animation
-  animateVariant?: string;
+  animateVariant: string;
   dispatchOnAnimationComplete?: Action;
 }
 
 export interface AvailableLetter {
-  id: string;
+  id: number;
   letter: string;
   disabled: boolean;
 }
@@ -49,6 +52,7 @@ export interface GameState {
   selectedLettersData: SelectedLettersData;
   selectedLetters: SelectedLetter[];
   availableLetters: AvailableLetter[];
+  foundWords: string[];
 }
 
 export interface Position {
@@ -81,9 +85,15 @@ export interface EnableAvailableLettersAction {
   payload: null;
 }
 
+export interface SubmitGuessAction {
+  type: "SUBMIT_GUESS";
+  payload: null;
+}
+
 export type Action =
   | LoadStageAction
   | SelectLetterAction
   | ClearSelectedLettersAction
   | SetSelectedLetterHiddenAction
-  | EnableAvailableLettersAction;
+  | EnableAvailableLettersAction
+  | SubmitGuessAction;

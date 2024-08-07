@@ -19,12 +19,17 @@ export default function SelectedLettersButtons({
     dispatch({ type: "CLEAR_SELECTED_LETTERS", payload: null });
   }
 
+  function submitGuessHandler() {
+    dispatch({ type: "SUBMIT_GUESS", payload: null });
+  }
+
   return (
     <div className="flex gap-3">
       <button
         className={`${styles.tile} ${
           submitButtonEnabled ? styles.accept : styles.disabled
         }`}
+        onClick={submitGuessHandler}
       >
         ✓
       </button>

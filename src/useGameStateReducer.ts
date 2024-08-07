@@ -1,16 +1,18 @@
 import React, { useReducer } from "react";
 
 import type {
+  WordData,
   GameState,
   Action,
   CellData,
+  SelectedLettersData,
   SelectedLetter,
   AvailableLetter,
 } from "./types.ts";
 import { stageData } from "./assets/stageData.ts";
 
 function generateId() {
-  return Math.random().toString();
+  return Math.random();
 }
 
 export function useGameStateReducer(initialStage: number) {
@@ -25,22 +27,30 @@ function gameStateReducerInit(currentStage: number): GameState {
     { length: currentStageData.rowCount },
     () =>
       Array.from({ length: currentStageData.columnCount }, () => ({
+        id: generateId(),
         status: "empty",
         letter: "",
+        animateVariant: "",
       }))
   );
   // populate game grid word data
   currentStageData.words.forEach(({ word, startX, startY, orientation }) => {
     for (let i = 0; i < word.length; i++) {
-      const cellData: CellData = {
+      const cellDataUpdate: Pick<CellData, "status" | "letter" | "ref"> = {
         status: "hidden",
         letter: word[i],
         ref: React.createRef<HTMLDivElement>(),
       };
       if (orientation === "x") {
-        gameGrid[startY][startX + i] = cellData;
+        gameGrid[startY][startX + i] = {
+          ...gameGrid[startY][startX + i],
+          ...cellDataUpdate,
+        };
       } else if (orientation === "y") {
-        gameGrid[startY + i][startX] = cellData;
+        gameGrid[startY + i][startX] = {
+          ...gameGrid[startY + i][startX],
+          ...cellDataUpdate,
+        };
       }
     }
   });
@@ -53,7 +63,7 @@ function gameStateReducerInit(currentStage: number): GameState {
       status: "hidden",
       letter: "",
       ref: React.createRef<HTMLDivElement>(),
-      animateVariant: "", // need to set this initially or onAnimationComplete gets wonky
+      animateVariant: "",
     })
   );
   // initialize available letter data
@@ -72,6 +82,7 @@ function gameStateReducerInit(currentStage: number): GameState {
     selectedLettersData,
     selectedLetters,
     availableLetters,
+    foundWords: [],
   };
 }
 
@@ -97,7 +108,7 @@ function gameStateReducer(state: GameState, action: Action): GameState {
       > = {
         status: "shown",
         letter: updatedSelectedAvailableLetter.letter,
-        animateVariant: "hiddenToshown",
+        animateVariant: "scaleBounce",
         dispatchOnAnimationComplete: undefined,
       };
       // update state
@@ -122,30 +133,7 @@ function gameStateReducer(state: GameState, action: Action): GameState {
 
     case "CLEAR_SELECTED_LETTERS": {
       // update state
-      return {
-        ...state,
-        loading: true,
-        selectedLettersData: {
-          currentSlotIndex: 0,
-          animateVariant: "waitForClearSelected",
-          dispatchOnAnimationComplete: {
-            type: "ENABLE_AVAILABLE_LETTERS",
-            payload: null,
-          },
-        },
-        selectedLetters: state.selectedLetters.map((selectedLetter) =>
-          selectedLetter.status === "shown"
-            ? {
-                ...selectedLetter,
-                animateVariant: "hideShown",
-                dispatchOnAnimationComplete: {
-                  type: "SET_SELECTED_LETTER_HIDDEN",
-                  payload: selectedLetter.id,
-                },
-              }
-            : selectedLetter
-        ),
-      };
+      return clearSelectedLettersStateUpdate(state, "waitForClearSelected");
     }
 
     case "SET_SELECTED_LETTER_HIDDEN": {
@@ -158,7 +146,7 @@ function gameStateReducer(state: GameState, action: Action): GameState {
                 ...selectedLetter,
                 letter: "",
                 status: "hidden",
-                animateVariant: "showHidden",
+                animateVariant: "scaleShow",
               }
             : selectedLetter;
         }),
@@ -181,7 +169,98 @@ function gameStateReducer(state: GameState, action: Action): GameState {
       };
     }
 
+    case "SUBMIT_GUESS": {
+      const guessedWord = state.selectedLetters.reduce(
+        (acc, selectedLetter) => {
+          return selectedLetter.status === "shown"
+            ? acc + selectedLetter.letter
+            : acc;
+        },
+        ""
+      );
+      const wordFoundOnBoard = state.currentStageData.words.find(
+        (wordData) => wordData.word === guessedWord
+      );
+      if (wordFoundOnBoard) {
+        const wordPreviouslyGuessed = state.foundWords.some(
+          (word) => word === guessedWord
+        );
+        if (wordPreviouslyGuessed) {
+          const updatedState = clearSelectedLettersStateUpdate(
+            state,
+            "waitForClearSelected"
+          );
+          return boardWordAnimationStateUpdate(
+            updatedState,
+            wordFoundOnBoard,
+            "scaleBounce"
+          );
+        } else {
+          return {
+            ...state,
+          };
+        }
+      } else {
+        return clearSelectedLettersStateUpdate(state, "shake");
+      }
+    }
+
     default:
       return state;
   }
+}
+
+function clearSelectedLettersStateUpdate(
+  state: GameState,
+  containerAnimateVariant: SelectedLettersData["animateVariant"]
+): GameState {
+  return {
+    ...state,
+    loading: true,
+    selectedLettersData: {
+      currentSlotIndex: 0,
+      animateVariant: containerAnimateVariant,
+      dispatchOnAnimationComplete: {
+        type: "ENABLE_AVAILABLE_LETTERS",
+        payload: null,
+      },
+    },
+    selectedLetters: state.selectedLetters.map((selectedLetter) =>
+      selectedLetter.status === "shown"
+        ? {
+            ...selectedLetter,
+            animateVariant: "scaleHide",
+            dispatchOnAnimationComplete: {
+              type: "SET_SELECTED_LETTER_HIDDEN",
+              payload: selectedLetter.id,
+            },
+          }
+        : selectedLetter
+    ),
+  };
+}
+
+function boardWordAnimationStateUpdate(
+  state: GameState,
+  wordData: WordData,
+  animateVariant: CellData["animateVariant"]
+): GameState {
+  // update array references to signal need for rerenders
+  const updatedGameGrid = state.gameGrid.map((row) => [...row]);
+  for (let i = 0; i < wordData.word.length; i++) {
+    if (wordData.orientation === "x") {
+      updatedGameGrid[wordData.startY][wordData.startX + i] = {
+        ...updatedGameGrid[wordData.startY][wordData.startX + i],
+        id: updatedGameGrid[wordData.startY][wordData.startX + i].id + 1,
+        animateVariant,
+      };
+    } else if (wordData.orientation === "y") {
+      updatedGameGrid[wordData.startY + i][wordData.startX] = {
+        ...updatedGameGrid[wordData.startY + i][wordData.startX],
+        id: updatedGameGrid[wordData.startY][wordData.startX + i].id + 1,
+        animateVariant,
+      };
+    }
+  }
+  return { ...state, gameGrid: updatedGameGrid };
 }
