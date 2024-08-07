@@ -1,5 +1,8 @@
+import { motion } from "framer-motion";
+
 import type { GameState, StageData } from "../types.ts";
 import styles from "../game.module.css";
+import * as FramerVariants from "../utils/framerVariants.ts";
 
 interface GameGridProps {
   gameGrid: GameState["gameGrid"];
@@ -16,14 +19,17 @@ export default function GameGrid({ gameGrid, columnCount }: GameGridProps) {
     >
       {gameGrid.map((row) =>
         row.map((cellData) => (
-          <div
+          <motion.div
             key={cellData.id}
             className={`${styles.tile} ${styles[cellData.status]}`}
+            ref={cellData?.ref}
+            animate={cellData.animateVariant}
+            variants={FramerVariants.selectedLetter}
           >
             <strong>
               {cellData.status === "shown" ? cellData.letter : ""}
             </strong>
-          </div>
+          </motion.div>
         ))
       )}
     </div>

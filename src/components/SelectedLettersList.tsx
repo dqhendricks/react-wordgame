@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-import type { GameState, Action } from "../types.ts";
+import type { GameState, SelectedLetter, Action } from "../types.ts";
 import styles from "../game.module.css";
 import * as FramerVariants from "../utils/framerVariants.ts";
 
@@ -14,9 +14,17 @@ export default function SelectedLetterList({
   dispatch,
 }: SelectedLettersListProps) {
   function letterAnimationCompleteHandler(
-    dispatchOnAnimationComplete: Action | undefined
+    dispatchOnAnimationComplete:
+      | SelectedLetter["dispatchOnAnimationComplete"]
+      | undefined
   ) {
-    if (dispatchOnAnimationComplete) dispatch(dispatchOnAnimationComplete);
+    if (dispatchOnAnimationComplete) {
+      if (Array.isArray(dispatchOnAnimationComplete)) {
+        dispatchOnAnimationComplete.forEach(dispatch);
+      } else {
+        dispatch(dispatchOnAnimationComplete);
+      }
+    }
   }
 
   return (
@@ -26,9 +34,9 @@ export default function SelectedLetterList({
           <motion.div
             className={`${styles.tile} ${styles[selectedLetter.status]}`}
             ref={selectedLetter.ref}
-            animate={selectedLetter?.animateVariant}
+            animate={selectedLetter.animateVariant}
             variants={FramerVariants.selectedLetter}
-            custom={index}
+            custom={selectedLetter.customVariantData}
             onAnimationComplete={() =>
               letterAnimationCompleteHandler(
                 selectedLetter?.dispatchOnAnimationComplete

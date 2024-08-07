@@ -20,7 +20,6 @@ export interface CellData {
   letter: string;
   ref?: React.RefObject<HTMLDivElement>; // to get position data for animations
   animateVariant: string;
-  dispatchOnAnimationComplete?: Action;
 }
 
 export interface SelectedLettersData {
@@ -35,7 +34,13 @@ export interface SelectedLetter {
   letter: string;
   ref: React.RefObject<HTMLDivElement>; // to get position data for animation
   animateVariant: string;
-  dispatchOnAnimationComplete?: Action;
+  customVariantData?: number | MoveAnimationVariantData;
+  dispatchOnAnimationComplete?: Action | Action[];
+}
+
+export interface MoveAnimationVariantData {
+  index: number;
+  animationOffset: Vector2D;
 }
 
 export interface AvailableLetter {
@@ -55,7 +60,7 @@ export interface GameState {
   foundWords: string[];
 }
 
-export interface Position {
+export interface Vector2D {
   x: number;
   y: number;
 }
@@ -90,10 +95,16 @@ export interface SubmitGuessAction {
   payload: null;
 }
 
+export interface SetBoardLetterShownAction {
+  type: "SET_BOARD_LETTER_SHOWN";
+  payload: { cellDataId: CellData["id"]; letter: CellData["letter"] };
+}
+
 export type Action =
   | LoadStageAction
   | SelectLetterAction
   | ClearSelectedLettersAction
   | SetSelectedLetterHiddenAction
   | EnableAvailableLettersAction
-  | SubmitGuessAction;
+  | SubmitGuessAction
+  | SetBoardLetterShownAction;
