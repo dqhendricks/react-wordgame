@@ -21,7 +21,6 @@ export function useGameStateReducer(initialStage: number) {
 }
 
 function gameStateReducerInit(currentStage: number): GameState {
-  const loading = false;
   const currentStageData = stageData[currentStage];
   // initialize game grid
   const gameGrid: GameState["gameGrid"] = Array.from(
@@ -73,13 +72,11 @@ function gameStateReducerInit(currentStage: number): GameState {
     }));
   // return state
   return {
-    loading,
-    totalVictory: false,
+    status: "active",
     currentStage,
     totalStages: stageData.length,
     currentStageData,
     gameGrid,
-    boardAnimateVariant: "show",
     selectedLettersData,
     selectedLetters,
     availableLetters,
@@ -92,7 +89,8 @@ function gameStateReducer(state: GameState, action: Action): GameState {
     case "LOAD_STAGE": {
       const stage = action.payload;
       // don't load a new level if all stages complete
-      if (stage === state.totalStages) return { ...state, totalVictory: true };
+      if (stage === state.totalStages)
+        return { ...state, status: "totalVictory" };
       return gameStateReducerInit(stage);
     }
 
@@ -206,7 +204,7 @@ function gameStateReducer(state: GameState, action: Action): GameState {
       // new word found
       return {
         ...state,
-        loading: true,
+        status: "loading",
         selectedLettersData: {
           ...state.selectedLettersData,
           animateVariant: "waitForMoveToBoard",
@@ -285,11 +283,11 @@ function gameStateReducer(state: GameState, action: Action): GameState {
       };
     }
 
-    case "SET_LOADING_STATE": {
-      const newLoadingState = action.payload;
+    case "SET_GAME_STATUS": {
+      const newStatus = action.payload;
       return {
         ...state,
-        loading: newLoadingState,
+        status: newStatus,
       };
     }
 
@@ -299,17 +297,13 @@ function gameStateReducer(state: GameState, action: Action): GameState {
       if (!isVictory) {
         return {
           ...state,
-          loading: false,
+          status: "active",
         };
       } else {
         // victory achieved!
         return {
           ...state,
-          boardAnimateVariant: "hide",
-          boardDispatchOnAnimationComplete: {
-            type: "LOAD_STAGE",
-            payload: state.currentStage + 1,
-          },
+          status: "closingStage",
         };
       }
     }
@@ -334,7 +328,7 @@ function clearSelectedLettersStateUpdate(
 ): GameState {
   return {
     ...state,
-    loading: true,
+    status: "loading",
     selectedLettersData: {
       ...state.selectedLettersData,
       animateVariant: containerAnimateVariant,
@@ -344,8 +338,8 @@ function clearSelectedLettersStateUpdate(
           payload: null,
         },
         {
-          type: "SET_LOADING_STATE",
-          payload: false,
+          type: "SET_GAME_STATUS",
+          payload: "active",
         },
       ],
     },

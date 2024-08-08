@@ -1,3 +1,15 @@
+export interface GameState {
+  status: "active" | "loading" | "closingStage" | "totalVictory";
+  currentStage: number;
+  totalStages: number;
+  currentStageData: StageData;
+  gameGrid: CellData[][];
+  selectedLettersData: SelectedLettersData;
+  selectedLetters: SelectedLetter[];
+  availableLetters: AvailableLetter[];
+  foundWords: string[];
+}
+
 type TileStatus = "shown" | "hidden" | "empty";
 
 type TileAnimateVariants =
@@ -60,21 +72,6 @@ export interface AvailableLetter {
   disabled: boolean;
 }
 
-export interface GameState {
-  loading: boolean;
-  totalVictory: boolean;
-  currentStage: number;
-  totalStages: number;
-  currentStageData: StageData;
-  gameGrid: CellData[][];
-  boardAnimateVariant: "" | "hide" | "show";
-  boardDispatchOnAnimationComplete?: Action | undefined;
-  selectedLettersData: SelectedLettersData;
-  selectedLetters: SelectedLetter[];
-  availableLetters: AvailableLetter[];
-  foundWords: string[];
-}
-
 export interface LoadStageAction {
   type: "LOAD_STAGE";
   payload: number;
@@ -110,9 +107,9 @@ export interface SetBoardLetterShownAction {
   payload: { cellDataId: CellData["id"]; letter: CellData["letter"] };
 }
 
-export interface SetLoadingStateAction {
-  type: "SET_LOADING_STATE";
-  payload: GameState["loading"];
+export interface SetGameStatusAction {
+  type: "SET_GAME_STATUS";
+  payload: GameState["status"];
 }
 
 export interface VictoryCheckAction {
@@ -128,5 +125,5 @@ export type Action =
   | EnableAvailableLettersAction
   | SubmitGuessAction
   | SetBoardLetterShownAction
-  | SetLoadingStateAction
+  | SetGameStatusAction
   | VictoryCheckAction;

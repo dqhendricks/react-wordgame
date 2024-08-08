@@ -6,24 +6,29 @@ import styles from "../game.module.css";
 import * as FramerVariants from "../utils/framerVariants.ts";
 
 interface GameGridProps {
+  status: GameState["status"];
+  currentStage: GameState["currentStage"];
   gameGrid: GameState["gameGrid"];
   columnCount: StageData["columnCount"];
-  boardAnimateVariant: GameState["boardAnimateVariant"];
-  boardDispatchOnAnimationComplete: GameState["boardDispatchOnAnimationComplete"];
   dispatch: React.Dispatch<Action>;
 }
 
 const GameGrid = React.memo(function ({
+  status,
+  currentStage,
   gameGrid,
   columnCount,
-  boardAnimateVariant,
-  boardDispatchOnAnimationComplete,
   dispatch,
 }: GameGridProps) {
-  function animationCompleteHandler(
-    dispatchOnAnimationComplete: GameState["boardDispatchOnAnimationComplete"]
-  ) {
-    if (dispatchOnAnimationComplete) dispatch(dispatchOnAnimationComplete);
+  const gridAnimateVariant =
+    status === "closingStage" || status === "totalVictory" ? "hide" : "show";
+
+  function animationCompleteHandler() {
+    if (status === "closingStage")
+      dispatch({
+        type: "LOAD_STAGE",
+        payload: currentStage + 1,
+      });
   }
 
   return (
@@ -32,11 +37,9 @@ const GameGrid = React.memo(function ({
       style={{
         gridTemplateColumns: `repeat(${columnCount}, minmax(0, 1fr))`,
       }}
-      animate={boardAnimateVariant}
+      animate={gridAnimateVariant}
       variants={FramerVariants.board}
-      onAnimationComplete={() =>
-        animationCompleteHandler(boardDispatchOnAnimationComplete)
-      }
+      onAnimationComplete={animationCompleteHandler}
     >
       {gameGrid.map((row) =>
         row.map((cellData) => (

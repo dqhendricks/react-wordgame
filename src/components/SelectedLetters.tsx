@@ -7,14 +7,14 @@ import SelectedLettersList from "./SelectedLettersList.tsx";
 import SelectedLettersButtons from "./SelectedLettersButtons.tsx";
 
 interface SelectedLettersProps {
-  loading: GameState["loading"];
+  status: GameState["status"];
   selectedLettersData: GameState["selectedLettersData"];
   selectedLetters: GameState["selectedLetters"];
   dispatch: React.Dispatch<Action>;
 }
 
 export default function SelectedLetters({
-  loading,
+  status,
   selectedLettersData,
   selectedLetters,
   dispatch,
@@ -48,7 +48,7 @@ export default function SelectedLetters({
         dispatch={dispatch}
       />
       <SelectedLettersButtons
-        loading={loading}
+        status={status}
         currentSlotIndex={currentSlotIndex}
         dispatch={dispatch}
       />

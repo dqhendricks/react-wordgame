@@ -2,18 +2,18 @@ import type { GameState, Action } from "../types.ts";
 import styles from "../game.module.css";
 
 interface SelectedLettersButtonsProps {
-  loading: GameState["loading"];
+  status: GameState["status"];
   currentSlotIndex: GameState["selectedLettersData"]["currentSlotIndex"];
   dispatch: React.Dispatch<Action>;
 }
 
 export default function SelectedLettersButtons({
-  loading,
+  status,
   currentSlotIndex,
   dispatch,
 }: SelectedLettersButtonsProps) {
-  const clearButtonEnabled = !loading && currentSlotIndex > 0;
-  const submitButtonEnabled = !loading && currentSlotIndex >= 3;
+  const clearButtonEnabled = status === "active" && currentSlotIndex > 0;
+  const submitButtonEnabled = status === "active" && currentSlotIndex >= 3;
 
   function clearSelectedLettersHandler() {
     if (!clearButtonEnabled) return;

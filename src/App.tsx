@@ -8,14 +8,11 @@ import AvailableLetters from "./components/AvailableLetters.tsx";
 function App() {
   const [
     {
-      loading,
-      totalVictory,
+      status,
       currentStage,
       totalStages,
       currentStageData,
       gameGrid,
-      boardAnimateVariant,
-      boardDispatchOnAnimationComplete,
       selectedLettersData,
       selectedLetters,
       availableLetters,
@@ -34,22 +31,22 @@ function App() {
           Stage: {`${currentStage + 1}/${totalStages}`}
         </div>
       </div>
-      <VictoryMessage totalVictory={totalVictory} />
+      <VictoryMessage status={status} />
       <GameGrid
+        status={status}
+        currentStage={currentStage}
         gameGrid={gameGrid}
         columnCount={currentStageData.columnCount}
-        boardAnimateVariant={boardAnimateVariant}
-        boardDispatchOnAnimationComplete={boardDispatchOnAnimationComplete}
         dispatch={dispatch}
       />
       <SelectedLetters
-        loading={loading}
+        status={status}
         selectedLettersData={selectedLettersData}
         selectedLetters={selectedLetters}
         dispatch={dispatch}
       />
       <AvailableLetters
-        loading={loading}
+        status={status}
         availableLetters={availableLetters}
         dispatch={dispatch}
       />
