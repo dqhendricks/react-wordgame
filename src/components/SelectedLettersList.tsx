@@ -26,7 +26,7 @@ export default function SelectedLetterList({
   }
 
   return (
-    <div className="flex gap-3">
+    <div className={`flex ${styles.tileGrid}`}>
       {selectedLetters.map((selectedLetter, index) => (
         <div key={index} className="pb-2 border-b-2 border-b-slate-200">
           <motion.div

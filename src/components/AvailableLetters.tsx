@@ -21,7 +21,7 @@ export default function AvailableLetters({
   }
 
   return (
-    <div className="flex gap-3 m-auto">
+    <div className={`flex m-auto ${styles.tileGrid}`}>
       {availableLetters.map((availableLetter) => (
         <button
           key={availableLetter.id}

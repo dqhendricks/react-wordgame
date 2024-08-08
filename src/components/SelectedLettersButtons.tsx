@@ -26,7 +26,7 @@ export default function SelectedLettersButtons({
   }
 
   return (
-    <div className="flex gap-3">
+    <div className={`flex ${styles.tileGrid}`}>
       <button
         className={`${styles.tile} ${
           submitButtonEnabled ? styles.accept : styles.disabled

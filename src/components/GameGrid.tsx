@@ -28,7 +28,7 @@ const GameGrid = React.memo(function ({
 
   return (
     <motion.div
-      className={`inline-grid gap-3 opacity-0`}
+      className={`inline-grid opacity-0 ${styles.tileGrid}`}
       style={{
         gridTemplateColumns: `repeat(${columnCount}, minmax(0, 1fr))`,
       }}

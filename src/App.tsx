@@ -1,3 +1,4 @@
+import styles from "./game.module.css";
 import { useGameStateReducer } from "./useGameStateReducer.ts";
 import VictoryMessage from "./components/VictoryMessage.tsx";
 import GameGrid from "./components/GameGrid.tsx";
@@ -25,11 +26,11 @@ function App() {
   return (
     <main
       key={currentStage}
-      className="relative flex flex-col items-center justify-center gap-10 max-w-4xl m-auto"
+      className={`relative flex flex-col items-center justify-center max-w-4xl m-auto ${styles.elementContainer}`}
     >
-      <div className="text-center flex flex-col gap-3">
-        <h1 className="text-5xl text-pretty pt-4">Word Game</h1>
-        <div className="text-sm">
+      <div className="text-center flex flex-col">
+        <h1 className={`text-pretty ${styles.title}`}>Word Game</h1>
+        <div className={styles.indicatorText}>
           Stage: {`${currentStage + 1}/${totalStages}`}
         </div>
       </div>
