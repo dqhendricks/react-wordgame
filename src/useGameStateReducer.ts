@@ -50,7 +50,10 @@ function gameStateReducerInit(currentStage: number): GameState {
     }
   });
   // initialize selected letters data
-  const selectedLettersData = { currentSlotIndex: 0, animateVariant: "" };
+  const selectedLettersData: GameState["selectedLettersData"] = {
+    currentSlotIndex: 0,
+    animateVariant: "",
+  };
   const selectedLetters: GameState["selectedLetters"] = Array.from(
     { length: currentStageData.letters.length },
     () => ({
@@ -74,6 +77,7 @@ function gameStateReducerInit(currentStage: number): GameState {
     currentStage,
     currentStageData,
     gameGrid,
+    boardAnimateVariant: "show",
     selectedLettersData,
     selectedLetters,
     availableLetters,
@@ -150,7 +154,6 @@ function gameStateReducer(state: GameState, action: Action): GameState {
     case "ENABLE_AVAILABLE_LETTERS": {
       return {
         ...state,
-        loading: false,
         selectedLettersData: {
           ...state.selectedLettersData,
           currentSlotIndex: 0,
@@ -203,10 +206,16 @@ function gameStateReducer(state: GameState, action: Action): GameState {
         selectedLettersData: {
           ...state.selectedLettersData,
           animateVariant: "waitForMoveToBoard",
-          dispatchOnAnimationComplete: {
-            type: "ENABLE_AVAILABLE_LETTERS",
-            payload: null,
-          },
+          dispatchOnAnimationComplete: [
+            {
+              type: "ENABLE_AVAILABLE_LETTERS",
+              payload: null,
+            },
+            {
+              type: "VICTORY_CHECK",
+              payload: null,
+            },
+          ],
         },
         selectedLetters: state.selectedLetters.map((selectedLetter, index) => {
           if (selectedLetter.status !== "shown") return selectedLetter;
@@ -272,18 +281,47 @@ function gameStateReducer(state: GameState, action: Action): GameState {
       };
     }
 
+    case "SET_LOADING_STATE": {
+      const newLoadingState = action.payload;
+      return {
+        ...state,
+        loading: newLoadingState,
+      };
+    }
+
+    case "VICTORY_CHECK": {
+      const isVictory =
+        state.foundWords.length === state.currentStageData.words.length;
+      if (!isVictory) {
+        return {
+          ...state,
+          loading: false,
+        };
+      } else {
+        // victory achieved!
+        return {
+          ...state,
+          boardAnimateVariant: "hide",
+          boardDispatchOnAnimationComplete: {
+            type: "LOAD_STAGE",
+            payload: state.currentStage + 1,
+          },
+        };
+      }
+    }
+
     default:
       return state;
   }
 }
 
 function getLetterGridPosition(
-  { orientation, startX, startY }: WordData,
+  { orientation, startPos }: WordData,
   letterIndex: number
 ): Vector2D {
   return orientation === "x"
-    ? { x: startX + letterIndex, y: startY }
-    : { x: startX, y: startY + letterIndex };
+    ? { x: startPos.x + letterIndex, y: startPos.y }
+    : { x: startPos.x, y: startPos.y + letterIndex };
 }
 
 function clearSelectedLettersStateUpdate(
@@ -296,10 +334,16 @@ function clearSelectedLettersStateUpdate(
     selectedLettersData: {
       ...state.selectedLettersData,
       animateVariant: containerAnimateVariant,
-      dispatchOnAnimationComplete: {
-        type: "ENABLE_AVAILABLE_LETTERS",
-        payload: null,
-      },
+      dispatchOnAnimationComplete: [
+        {
+          type: "ENABLE_AVAILABLE_LETTERS",
+          payload: null,
+        },
+        {
+          type: "SET_LOADING_STATE",
+          payload: false,
+        },
+      ],
     },
     selectedLetters: state.selectedLetters.map((selectedLetter, index) =>
       selectedLetter.status === "shown"

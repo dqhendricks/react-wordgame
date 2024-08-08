@@ -2,7 +2,7 @@ import type { Variants } from "framer-motion";
 
 import type { MoveAnimationVariantData } from "../types.ts";
 
-export const selectedLetter: Variants = {
+export const tile: Variants = {
   scaleBounce: {
     scale: [1.2, 0.9, 1.1, 0.95, 1],
     transition: {
@@ -67,4 +67,28 @@ export const selectedLettersContainer: Variants = {
       duration: 0.7 + totalLetters * 0.05,
     },
   }),
+};
+
+export const board: Variants = {
+  hide: {
+    scale: [1, 1.05, 1, 1.05, 1, 1.05, 1, 0.5, 0],
+    rotate: [0, 0, 0, 0, 0, 0, 0, 180, 360],
+    opacity: [1, 1, 1, 1, 1, 1, 1, 1, 0],
+    transition: {
+      duration: 2,
+      ease: "linear",
+      times: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1],
+    },
+  },
+
+  show: {
+    scale: [0, 0.5, 1],
+    rotate: [360, 180, 0],
+    opacity: [0, 1, 1],
+    transition: {
+      duration: 1,
+      ease: "linear",
+      times: [0, 0.5, 1],
+    },
+  },
 };

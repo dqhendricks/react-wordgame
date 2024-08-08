@@ -25,7 +25,13 @@ export default function SelectedLetters({
   } = selectedLettersData;
 
   function containerAnimationCompleteHandler() {
-    if (dispatchOnAnimationComplete) dispatch(dispatchOnAnimationComplete);
+    if (dispatchOnAnimationComplete) {
+      if (Array.isArray(dispatchOnAnimationComplete)) {
+        dispatchOnAnimationComplete.forEach(dispatch);
+      } else {
+        dispatch(dispatchOnAnimationComplete);
+      }
+    }
   }
 
   return (

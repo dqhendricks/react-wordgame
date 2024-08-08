@@ -12,14 +12,16 @@ export default function SelectedLettersButtons({
   currentSlotIndex,
   dispatch,
 }: SelectedLettersButtonsProps) {
-  const submitButtonEnabled = !loading && currentSlotIndex >= 3;
   const clearButtonEnabled = !loading && currentSlotIndex > 0;
+  const submitButtonEnabled = !loading && currentSlotIndex >= 3;
 
   function clearSelectedLettersHandler() {
+    if (!clearButtonEnabled) return;
     dispatch({ type: "CLEAR_SELECTED_LETTERS", payload: null });
   }
 
   function submitGuessHandler() {
+    if (!submitButtonEnabled) return;
     dispatch({ type: "SUBMIT_GUESS", payload: null });
   }
 

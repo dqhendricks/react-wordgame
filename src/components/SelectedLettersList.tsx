@@ -35,7 +35,7 @@ export default function SelectedLetterList({
             className={`${styles.tile} ${styles[selectedLetter.status]}`}
             ref={selectedLetter.ref}
             animate={selectedLetter.animateVariant}
-            variants={FramerVariants.selectedLetter}
+            variants={FramerVariants.tile}
             custom={selectedLetter.customVariantData}
             onAnimationComplete={() =>
               letterAnimationCompleteHandler(

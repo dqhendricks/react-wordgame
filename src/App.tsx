@@ -10,6 +10,8 @@ function App() {
       currentStage,
       currentStageData,
       gameGrid,
+      boardAnimateVariant,
+      boardDispatchOnAnimationComplete,
       selectedLettersData,
       selectedLetters,
       availableLetters,
@@ -18,11 +20,17 @@ function App() {
   ] = useGameStateReducer(0);
 
   return (
-    <main className="flex flex-col items-center justify-center gap-5 max-w-5xl m-auto">
+    <main
+      key={currentStage}
+      className="flex flex-col items-center justify-center gap-5 max-w-5xl m-auto"
+    >
       <h1 className="text-5xl text-pretty p-4">Word Game</h1>
       <GameGrid
         gameGrid={gameGrid}
         columnCount={currentStageData.columnCount}
+        boardAnimateVariant={boardAnimateVariant}
+        boardDispatchOnAnimationComplete={boardDispatchOnAnimationComplete}
+        dispatch={dispatch}
       />
       <SelectedLetters
         loading={loading}
