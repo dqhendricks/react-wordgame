@@ -29,7 +29,7 @@ export default function GameGrid({
 
   return (
     <motion.div
-      className={`inline-grid gap-3`}
+      className={`inline-grid gap-3 opacity-0`}
       style={{
         gridTemplateColumns: `repeat(${columnCount}, minmax(0, 1fr))`,
       }}

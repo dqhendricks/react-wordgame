@@ -36,7 +36,7 @@ export default function SelectedLetters({
 
   return (
     <motion.div
-      className="flex gap-7 pb-5 pt-7"
+      className="flex gap-7"
       animate={animateVariant}
       variants={FramerVariants.selectedLettersContainer}
       custom={selectedLettersData.currentSlotIndex + 1}

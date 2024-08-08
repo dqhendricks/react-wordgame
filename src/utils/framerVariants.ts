@@ -92,3 +92,26 @@ export const board: Variants = {
     },
   },
 };
+
+export const victory: Variants = {
+  bobAndBounce: {
+    rotate: [-12, 10, -12],
+    scale: [1, 1.2, 1],
+    x: ["-50%", "-50%", "-50%"],
+    y: ["-50%", "-50%", "-50%"],
+    transition: {
+      rotate: {
+        repeat: Infinity,
+        repeatType: "loop",
+        duration: 1,
+        ease: "easeInOut",
+      },
+      scale: {
+        repeat: Infinity,
+        repeatType: "loop",
+        duration: 0.5,
+        ease: "easeInOut",
+      },
+    },
+  },
+};

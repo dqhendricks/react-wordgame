@@ -75,6 +75,7 @@ function gameStateReducerInit(currentStage: number): GameState {
   return {
     loading,
     currentStage,
+    totalStages: stageData.length,
     currentStageData,
     gameGrid,
     boardAnimateVariant: "show",
@@ -89,6 +90,8 @@ function gameStateReducer(state: GameState, action: Action): GameState {
   switch (action.type) {
     case "LOAD_STAGE": {
       const stage = action.payload;
+      // don't load a new level if all stages complete
+      if (stage === state.totalStages) return { ...state, totalVictory: true };
       return gameStateReducerInit(stage);
     }
 

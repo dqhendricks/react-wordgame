@@ -1,4 +1,5 @@
 import { useGameStateReducer } from "./useGameStateReducer.ts";
+import VictoryMessage from "./components/VictoryMessage.tsx";
 import GameGrid from "./components/GameGrid.tsx";
 import SelectedLetters from "./components/SelectedLetters.tsx";
 import AvailableLetters from "./components/AvailableLetters.tsx";
@@ -7,7 +8,9 @@ function App() {
   const [
     {
       loading,
+      totalVictory,
       currentStage,
+      totalStages,
       currentStageData,
       gameGrid,
       boardAnimateVariant,
@@ -22,9 +25,15 @@ function App() {
   return (
     <main
       key={currentStage}
-      className="flex flex-col items-center justify-center gap-5 max-w-5xl m-auto"
+      className="relative flex flex-col items-center justify-center gap-10 max-w-4xl m-auto"
     >
-      <h1 className="text-5xl text-pretty p-4">Word Game</h1>
+      <div className="text-center flex flex-col gap-3">
+        <h1 className="text-5xl text-pretty pt-4">Word Game</h1>
+        <div className="text-sm">
+          Stage: {`${currentStage + 1}/${totalStages}`}
+        </div>
+      </div>
+      <VictoryMessage totalVictory={totalVictory} />
       <GameGrid
         gameGrid={gameGrid}
         columnCount={currentStageData.columnCount}

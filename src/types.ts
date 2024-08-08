@@ -62,7 +62,9 @@ export interface AvailableLetter {
 
 export interface GameState {
   loading: boolean;
+  totalVictory: boolean;
   currentStage: number;
+  totalStages: number;
   currentStageData: StageData;
   gameGrid: CellData[][];
   boardAnimateVariant: "" | "hide" | "show";
