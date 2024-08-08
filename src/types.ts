@@ -36,7 +36,7 @@ export interface CellData {
 export interface SelectedLettersData {
   currentSlotIndex: number; // used to determine next selected letter slot to populate
   animateVariant: "" | "waitForClearSelected" | "shake" | "waitForMoveToBoard";
-  dispatchOnAnimationComplete?: Action | Action[];
+  dispatchOnAnimationComplete?: Action | Action[] | undefined;
 }
 
 export interface SelectedLetter {
@@ -46,7 +46,7 @@ export interface SelectedLetter {
   ref: React.RefObject<HTMLDivElement>; // to get position data for animation
   animateVariant: TileAnimateVariants;
   customVariantData?: number | MoveAnimationVariantData;
-  dispatchOnAnimationComplete?: Action | Action[];
+  dispatchOnAnimationComplete?: Action | Action[] | undefined;
 }
 
 export interface MoveAnimationVariantData {
@@ -68,7 +68,7 @@ export interface GameState {
   currentStageData: StageData;
   gameGrid: CellData[][];
   boardAnimateVariant: "" | "hide" | "show";
-  boardDispatchOnAnimationComplete?: Action;
+  boardDispatchOnAnimationComplete?: Action | undefined;
   selectedLettersData: SelectedLettersData;
   selectedLetters: SelectedLetter[];
   availableLetters: AvailableLetter[];

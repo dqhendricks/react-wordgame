@@ -1,8 +1,13 @@
 import { motion } from "framer-motion";
 
+import type { GameState } from "../types.ts";
 import * as FramerVariants from "../utils/framerVariants.ts";
 
-export default function VictoryMessage({ totalVictory }) {
+interface VictoryMessageProps {
+  totalVictory: GameState["totalVictory"];
+}
+
+export default function VictoryMessage({ totalVictory }: VictoryMessageProps) {
   return (
     <>
       {totalVictory && (

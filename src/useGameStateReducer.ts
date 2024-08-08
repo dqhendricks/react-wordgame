@@ -74,6 +74,7 @@ function gameStateReducerInit(currentStage: number): GameState {
   // return state
   return {
     loading,
+    totalVictory: false,
     currentStage,
     totalStages: stageData.length,
     currentStageData,

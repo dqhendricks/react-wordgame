@@ -1,3 +1,4 @@
+import React from "react";
 import { motion } from "framer-motion";
 
 import type { GameState, StageData, Action } from "../types.ts";
@@ -12,7 +13,7 @@ interface GameGridProps {
   dispatch: React.Dispatch<Action>;
 }
 
-export default function GameGrid({
+const GameGrid = React.memo(function ({
   gameGrid,
   columnCount,
   boardAnimateVariant,
@@ -20,9 +21,7 @@ export default function GameGrid({
   dispatch,
 }: GameGridProps) {
   function animationCompleteHandler(
-    dispatchOnAnimationComplete:
-      | GameState["boardDispatchOnAnimationComplete"]
-      | undefined
+    dispatchOnAnimationComplete: GameState["boardDispatchOnAnimationComplete"]
   ) {
     if (dispatchOnAnimationComplete) dispatch(dispatchOnAnimationComplete);
   }
@@ -54,4 +53,8 @@ export default function GameGrid({
       )}
     </motion.div>
   );
-}
+});
+
+GameGrid.displayName = "GameGrid";
+
+export default GameGrid;

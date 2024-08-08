@@ -14,9 +14,7 @@ export default function SelectedLetterList({
   dispatch,
 }: SelectedLettersListProps) {
   function letterAnimationCompleteHandler(
-    dispatchOnAnimationComplete:
-      | SelectedLetter["dispatchOnAnimationComplete"]
-      | undefined
+    dispatchOnAnimationComplete: SelectedLetter["dispatchOnAnimationComplete"]
   ) {
     if (dispatchOnAnimationComplete) {
       if (Array.isArray(dispatchOnAnimationComplete)) {
