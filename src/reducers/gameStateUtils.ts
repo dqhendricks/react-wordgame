@@ -29,9 +29,9 @@ export function handleSelectLetter(
   selectedAvailableLetter: AvailableLetter
 ): GameState {
   const currentSlotIndex = state.selectedLettersData.currentSlotIndex;
-  // update selected letter and available letter states
   return {
     ...state,
+    // show selected letter with animation
     selectedLettersData: {
       ...state.selectedLettersData,
       currentSlotIndex: currentSlotIndex + 1,
@@ -48,6 +48,7 @@ export function handleSelectLetter(
             : selectedLetter
       ),
     },
+    // disable available letter
     availableLetters: state.availableLetters.map((availableLetter) =>
       availableLetter.id === selectedAvailableLetter.id
         ? {
@@ -68,11 +69,13 @@ export function handleClearSelectedLetters(
     status: "loading",
     selectedLettersData: {
       ...state.selectedLettersData,
+      // set container to animate and dispatch post animation logic
       animateVariant: containerAnimateVariant,
       dispatchOnAnimationComplete: [
         enableAvailableLettersAction(),
         setGameStatusAction("active"),
       ],
+      // animate hiding selected letters
       selectedLetters: state.selectedLettersData.selectedLetters.map(
         (selectedLetter, index) =>
           selectedLetter.status === "shown"
@@ -93,12 +96,14 @@ export function handleClearSelectedLetters(
 export function handleEnableAvailableLetters(state: GameState): GameState {
   return {
     ...state,
+    // reset all selected letters
     selectedLettersData: {
       ...state.selectedLettersData,
       currentSlotIndex: 0,
       animateVariant: "",
       dispatchOnAnimationComplete: undefined,
     },
+    // enable all available letters
     availableLetters: state.availableLetters.map((availableLetter) => ({
       ...availableLetter,
       disabled: false,
@@ -112,6 +117,7 @@ export function handleSetSelectedLetterHidden(
 ): GameState {
   return {
     ...state,
+    // set selected letter to show with animation
     selectedLettersData: {
       ...state.selectedLettersData,
       selectedLetters: state.selectedLettersData.selectedLetters.map(
@@ -137,6 +143,7 @@ export function handleBoardWordAnimationUpdate(
 ): GameState {
   // update array references to signal need for rerenders
   const updatedGameGrid = state.gameGrid.map((row) => [...row]);
+  // set all letters in word to animate
   for (let i = 0; i < wordData.word.length; i++) {
     const gridPosition = getLetterGridPosition(wordData, i);
     updatedGameGrid[gridPosition.y][gridPosition.x] = {
@@ -157,11 +164,13 @@ export function handleNewWordFound(
     status: "loading",
     selectedLettersData: {
       ...state.selectedLettersData,
+      // set container to animate and dispatch post animation logic
       animateVariant: "waitForMoveToBoard",
       dispatchOnAnimationComplete: [
         enableAvailableLettersAction(),
         victoryCheckAction(),
       ],
+      // set selected letters to animate
       selectedLetters: state.selectedLettersData.selectedLetters.map(
         (selectedLetter, index) => {
           if (selectedLetter.status !== "shown") return selectedLetter;
@@ -210,6 +219,7 @@ export function handleSetBoardLetterShown(
 ): GameState {
   return {
     ...state,
+    // change board letter to status "shown" and animate
     gameGrid: state.gameGrid.map((row) =>
       row.map((cellData) =>
         cellData.id === cellDataId
