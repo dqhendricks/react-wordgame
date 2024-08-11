@@ -5,7 +5,7 @@ import styles from "../game.module.css";
 import * as FramerVariants from "../utils/framerVariants.ts";
 
 interface SelectedLettersListProps {
-  selectedLetters: GameState["selectedLetters"];
+  selectedLetters: GameState["selectedLettersData"]["selectedLetters"];
   dispatch: React.Dispatch<Action>;
 }
 
