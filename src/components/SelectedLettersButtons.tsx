@@ -1,5 +1,9 @@
 import type { GameState, Action } from "../types.ts";
 import styles from "../game.module.css";
+import {
+  clearSelectedLettersAction,
+  submitGuessAction,
+} from "../reducers/gameStateActions.ts";
 
 interface SelectedLettersButtonsProps {
   status: GameState["status"];
@@ -17,12 +21,12 @@ export default function SelectedLettersButtons({
 
   function clearSelectedLettersHandler() {
     if (!clearButtonEnabled) return;
-    dispatch({ type: "CLEAR_SELECTED_LETTERS", payload: null });
+    dispatch(clearSelectedLettersAction());
   }
 
   function submitGuessHandler() {
     if (!submitButtonEnabled) return;
-    dispatch({ type: "SUBMIT_GUESS", payload: null });
+    dispatch(submitGuessAction());
   }
 
   return (

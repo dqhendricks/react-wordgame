@@ -1,6 +1,5 @@
 .elementContainer {
-  @apply gap-4;
-  @apply xs:gap-6;
+  @apply gap-6;
   @apply sm:gap-8;
   @apply md:gap-10;
 }
@@ -25,13 +24,12 @@
 }
 
 .tileGrid {
-  @apply gap-1;
-  @apply xs:gap-2;
+  @apply gap-2;
   @apply md:gap-3;
 }
 
 .tile {
-  @apply w-6 h-6 text-xl rounded-md;
+  @apply w-7 h-7 text-xl rounded-md;
   @apply xs:w-8 xs:h-8 xs:text-2xl xs:rounded-md;
   @apply sm:w-10 sm:h-10 sm:text-3xl sm:rounded-lg;
   @apply md:w-12 md:h-12 md:text-4xl md:rounded-xl;

@@ -1,11 +1,10 @@
 export interface GameState {
-  status: "active" | "loading" | "closingStage" | "totalVictory";
-  currentStage: number;
+  status: "active" | "loading" | "closingStage" | "wonTheGame";
+  stage: number;
   totalStages: number;
-  currentStageData: StageData;
+  stageData: StageData;
   gameGrid: CellData[][];
   selectedLettersData: SelectedLettersData;
-  selectedLetters: SelectedLetter[];
   availableLetters: AvailableLetter[];
   foundWords: string[];
 }
@@ -49,6 +48,7 @@ export interface SelectedLettersData {
   currentSlotIndex: number; // used to determine next selected letter slot to populate
   animateVariant: "" | "waitForClearSelected" | "shake" | "waitForMoveToBoard";
   dispatchOnAnimationComplete?: Action | Action[] | undefined;
+  selectedLetters: SelectedLetter[];
 }
 
 export interface SelectedLetter {
@@ -73,8 +73,8 @@ export interface AvailableLetter {
 }
 
 export interface LoadStageAction {
-  type: "LOAD_STAGE";
-  payload: number;
+  type: "LOAD_NEXT_STAGE";
+  payload: null;
 }
 
 export interface SelectLetterAction {
@@ -87,14 +87,14 @@ export interface ClearSelectedLettersAction {
   payload: null;
 }
 
-export interface SetSelectedLetterHiddenAction {
-  type: "SET_SELECTED_LETTER_HIDDEN";
-  payload: SelectedLetter["id"];
-}
-
 export interface EnableAvailableLettersAction {
   type: "ENABLE_AVAILABLE_LETTERS";
   payload: null;
+}
+
+export interface SetSelectedLetterHiddenAction {
+  type: "SET_SELECTED_LETTER_HIDDEN";
+  payload: SelectedLetter["id"];
 }
 
 export interface SubmitGuessAction {

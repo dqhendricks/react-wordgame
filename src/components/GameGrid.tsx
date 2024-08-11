@@ -4,10 +4,10 @@ import { motion } from "framer-motion";
 import type { GameState, StageData, Action } from "../types.ts";
 import styles from "../game.module.css";
 import * as FramerVariants from "../utils/framerVariants.ts";
+import { loadNextStageAction } from "../reducers/gameStateActions.ts";
 
 interface GameGridProps {
   status: GameState["status"];
-  currentStage: GameState["currentStage"];
   gameGrid: GameState["gameGrid"];
   columnCount: StageData["columnCount"];
   dispatch: React.Dispatch<Action>;
@@ -15,20 +15,15 @@ interface GameGridProps {
 
 const GameGrid = React.memo(function ({
   status,
-  currentStage,
   gameGrid,
   columnCount,
   dispatch,
 }: GameGridProps) {
   const gridAnimateVariant =
-    status === "closingStage" || status === "totalVictory" ? "hide" : "show";
+    status === "closingStage" || status === "wonTheGame" ? "hide" : "show";
 
   function animationCompleteHandler() {
-    if (status === "closingStage")
-      dispatch({
-        type: "LOAD_STAGE",
-        payload: currentStage + 1,
-      });
+    if (status === "closingStage") dispatch(loadNextStageAction());
   }
 
   return (

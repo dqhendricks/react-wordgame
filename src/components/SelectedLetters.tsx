@@ -9,20 +9,19 @@ import SelectedLettersButtons from "./SelectedLettersButtons.tsx";
 interface SelectedLettersProps {
   status: GameState["status"];
   selectedLettersData: GameState["selectedLettersData"];
-  selectedLetters: GameState["selectedLetters"];
   dispatch: React.Dispatch<Action>;
 }
 
 export default function SelectedLetters({
   status,
   selectedLettersData,
-  selectedLetters,
   dispatch,
 }: SelectedLettersProps) {
   const {
     currentSlotIndex,
     animateVariant = undefined,
     dispatchOnAnimationComplete = undefined,
+    selectedLetters,
   } = selectedLettersData;
 
   function containerAnimationCompleteHandler() {
@@ -37,7 +36,7 @@ export default function SelectedLetters({
 
   return (
     <motion.div
-      className={`flex ${styles.elementContainer}`}
+      className={`flex pt-3 ${styles.elementContainer}`}
       animate={animateVariant}
       variants={FramerVariants.selectedLettersContainer}
       custom={selectedLettersData.currentSlotIndex + 1}

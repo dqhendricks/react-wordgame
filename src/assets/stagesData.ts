@@ -1,6 +1,6 @@
 import type { StageData } from "../types.ts";
 
-export const stageData: StageData[] = [
+export const stagesData: StageData[] = [
   {
     rowCount: 7,
     columnCount: 10,

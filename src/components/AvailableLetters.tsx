@@ -1,5 +1,6 @@
 import type { GameState, AvailableLetter, Action } from "../types.ts";
 import styles from "../game.module.css";
+import { selectLetterAction } from "../reducers/gameStateActions.ts";
 
 interface AvailableLettersProps {
   status: GameState["status"];
@@ -12,16 +13,13 @@ export default function AvailableLetters({
   availableLetters,
   dispatch,
 }: AvailableLettersProps) {
-  function handleClick(selectedLetter: AvailableLetter) {
-    if (status === "loading" || selectedLetter.disabled) return;
-    dispatch({
-      type: "SELECT_LETTER",
-      payload: selectedLetter,
-    });
+  function handleClick(selectedAvailableLetter: AvailableLetter) {
+    if (status === "loading" || selectedAvailableLetter.disabled) return;
+    dispatch(selectLetterAction(selectedAvailableLetter));
   }
 
   return (
-    <div className={`flex m-auto ${styles.tileGrid}`}>
+    <div className={`flex m-auto pb-4 ${styles.tileGrid}`}>
       {availableLetters.map((availableLetter) => (
         <button
           key={availableLetter.id}
