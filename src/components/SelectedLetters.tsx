@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 import type { GameState, Action } from "../types.ts";
 import styles from "../game.module.css";
@@ -35,7 +35,7 @@ export default function SelectedLetters({
   }
 
   return (
-    <motion.div
+    <m.div
       className={`flex pt-3 ${styles.elementContainer}`}
       animate={animateVariant}
       variants={FramerVariants.selectedLettersContainer}
@@ -51,6 +51,6 @@ export default function SelectedLetters({
         currentSlotIndex={currentSlotIndex}
         dispatch={dispatch}
       />
-    </motion.div>
+    </m.div>
   );
 }

@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 import type { GameState, SelectedLetter, Action } from "../types.ts";
 import styles from "../game.module.css";
@@ -29,7 +29,7 @@ export default function SelectedLetterList({
     <div className={`flex ${styles.tileGrid}`}>
       {selectedLetters.map((selectedLetter, index) => (
         <div key={index} className="pb-2 border-b-2 border-b-slate-200">
-          <motion.div
+          <m.div
             className={`${styles.tile} ${styles[selectedLetter.status]}`}
             ref={selectedLetter.ref}
             animate={selectedLetter.animateVariant}
@@ -42,7 +42,7 @@ export default function SelectedLetterList({
             }
           >
             {selectedLetter.letter}
-          </motion.div>
+          </m.div>
         </div>
       ))}
     </div>

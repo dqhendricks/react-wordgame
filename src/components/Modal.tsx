@@ -1,7 +1,7 @@
 import { useState, PropsWithChildren } from "react";
-import { motion, Variants } from "framer-motion";
+import { m, Variants } from "framer-motion";
 
-const framerVariants: Variants = {
+const modalContainer: Variants = {
   fadeIn: {
     opacity: [0, 1],
     transition: {
@@ -10,17 +10,6 @@ const framerVariants: Variants = {
       times: [0, 1],
     },
   },
-
-  fadeAndFallIn: {
-    y: [-75, 0],
-    opacity: [0, 1],
-    transition: {
-      duration: 0.3,
-      ease: "easeOut",
-      times: [0, 1],
-    },
-  },
-
   fadeOut: {
     opacity: [1, 0],
     transition: {
@@ -29,8 +18,19 @@ const framerVariants: Variants = {
       times: [0, 1],
     },
   },
+};
 
-  fadeAndBounceOut: {
+const modal: Variants = {
+  fadeIn: {
+    y: [-75, 0],
+    opacity: [0, 1],
+    transition: {
+      duration: 0.3,
+      ease: "easeOut",
+      times: [0, 1],
+    },
+  },
+  fadeOut: {
     y: [0, -75],
     opacity: [1, 0],
     transition: {
@@ -71,18 +71,17 @@ export default function Modal({
 
   if (!show) return null;
   return (
-    <motion.div
+    <m.div
       className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
       onClick={handleHide}
       animate={hide ? "fadeOut" : "fadeIn"}
-      variants={framerVariants}
+      variants={modalContainer}
       onAnimationComplete={handleOnAnimationComplete}
     >
-      <motion.div
+      <m.div
         className="rounded-xl overflow-hidden bg-slate-700 flex flex-col min-h-48 m-2"
         onClick={handleModalClick}
-        animate={hide ? "fadeAndBounceOut" : "fadeAndFallIn"}
-        variants={framerVariants}
+        variants={modal}
       >
         <div className="bg-slate-600 flex justify-between p-2 text-lg">
           <div className="px-2">{title}</div>
@@ -98,7 +97,7 @@ export default function Modal({
         <div className="flex items-center justify-center flex-1 p-4">
           {children}
         </div>
-      </motion.div>
-    </motion.div>
+      </m.div>
+    </m.div>
   );
 }

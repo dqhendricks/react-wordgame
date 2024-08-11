@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 import type { GameState, StageData, Action } from "../types.ts";
 import styles from "../game.module.css";
@@ -27,7 +27,7 @@ const GameGrid = React.memo(function ({
   }
 
   return (
-    <motion.div
+    <m.div
       className={`inline-grid opacity-0 ${styles.tileGrid}`}
       style={{
         gridTemplateColumns: `repeat(${columnCount}, minmax(0, 1fr))`,
@@ -38,7 +38,7 @@ const GameGrid = React.memo(function ({
     >
       {gameGrid.map((row) =>
         row.map((cellData) => (
-          <motion.div
+          <m.div
             key={cellData.id}
             className={`${styles.tile} ${styles[cellData.status]}`}
             ref={cellData?.ref}
@@ -46,10 +46,10 @@ const GameGrid = React.memo(function ({
             variants={FramerVariants.tile}
           >
             {cellData.status === "shown" ? cellData.letter : ""}
-          </motion.div>
+          </m.div>
         ))
       )}
-    </motion.div>
+    </m.div>
   );
 });
 
