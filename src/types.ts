@@ -1,5 +1,5 @@
 export interface GameState {
-  status: "active" | "loading" | "closingStage" | "wonTheGame";
+  status: "active" | "loading" | "closingStage" | "wonTheGame" | "help";
   stage: number;
   totalStages: number;
   stageData: StageData;

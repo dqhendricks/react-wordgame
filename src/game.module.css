@@ -51,7 +51,7 @@
   @apply bg-slate-800 text-slate-600 cursor-default;
 }
 
-.tile.shown.available {
+.tile.available {
   @apply hover:outline hover:outline-slate-700 active:outline active:outline-slate-600;
 }
 

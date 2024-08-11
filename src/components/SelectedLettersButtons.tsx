@@ -45,7 +45,7 @@ export default function SelectedLettersButtons({
         }`}
         onClick={clearSelectedLettersHandler}
       >
-        X
+        ✗
       </button>
     </div>
   );

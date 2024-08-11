@@ -1,5 +1,6 @@
 import styles from "./game.module.css";
 import { useGameStateReducer } from "./reducers/useGameStateReducer.ts";
+import Header from "./components/Header.tsx";
 import VictoryMessage from "./components/VictoryMessage.tsx";
 import GameGrid from "./components/GameGrid.tsx";
 import SelectedLetters from "./components/SelectedLetters.tsx";
@@ -22,14 +23,14 @@ function App() {
   return (
     <main
       key={stage}
-      className={`relative flex flex-col items-center justify-center max-w-4xl m-auto ${styles.elementContainer}`}
+      className={`relative flex flex-col items-center justify-center m-auto ${styles.elementContainer}`}
     >
-      <div className="text-center flex flex-col">
-        <h1 className={`text-pretty ${styles.title}`}>Word Game</h1>
-        <div className={styles.indicatorText}>
-          Stage: {`${stage + 1}/${totalStages}`}
-        </div>
-      </div>
+      <Header
+        status={status}
+        stage={stage}
+        totalStages={totalStages}
+        dispatch={dispatch}
+      />
       <VictoryMessage status={status} />
       <GameGrid
         status={status}
