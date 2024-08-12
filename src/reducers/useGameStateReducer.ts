@@ -6,6 +6,7 @@ import { gameStateInit } from "./gameStateInit.ts";
 import * as gameStateUtils from "./gameStateUtils.ts";
 
 export function useGameStateReducer(initialStage: number) {
+  console.log(gameStateInit({ stage: 0, stagesData }));
   return useReducer(
     gameStateReducer,
     { stage: initialStage, stagesData },
