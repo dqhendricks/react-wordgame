@@ -12,6 +12,15 @@ export const tile: Variants = {
     },
   },
 
+  scaleBounceBig: {
+    scale: [1.2, 0.9, 1.1, 0.95, 1],
+    transition: {
+      duration: 1,
+      ease: "easeOut",
+      times: [0, 0.2, 0.5, 0.7, 1],
+    },
+  },
+
   scaleHide: (index: number) => ({
     scale: 0,
     transition: {

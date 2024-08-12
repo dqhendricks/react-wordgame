@@ -40,6 +40,7 @@ export function handleSelectLetter(
           index === currentSlotIndex
             ? {
                 ...selectedLetter,
+                key: selectedLetter.key,
                 status: "shown",
                 letter: selectedAvailableLetter.letter,
                 animateVariant: "scaleBounce",
@@ -64,6 +65,7 @@ export function handleClearSelectedLetters(
   state: GameState,
   containerAnimateVariant: SelectedLettersData["animateVariant"]
 ): GameState {
+  // begins animations and sets up dispatches for after animations complete
   return {
     ...state,
     status: "loading",
@@ -81,6 +83,7 @@ export function handleClearSelectedLetters(
           selectedLetter.status === "shown"
             ? {
                 ...selectedLetter,
+                key: selectedLetter.key,
                 animateVariant: "scaleHide",
                 customVariantData: index,
                 dispatchOnAnimationComplete: setSelectedLetterHiddenAction(
@@ -125,9 +128,11 @@ export function handleSetSelectedLetterHidden(
           return selectedLetter.id === selectedLetterId
             ? {
                 ...selectedLetter,
+                key: selectedLetter.key,
                 letter: "",
                 status: "hidden",
                 animateVariant: "scaleShow",
+                dispatchOnAnimationComplete: undefined,
               }
             : selectedLetter;
         }
@@ -148,7 +153,7 @@ export function handleBoardWordAnimationUpdate(
     const gridPosition = getLetterGridPosition(wordData, i);
     updatedGameGrid[gridPosition.y][gridPosition.x] = {
       ...updatedGameGrid[gridPosition.y][gridPosition.x],
-      id: updatedGameGrid[gridPosition.y][gridPosition.x].id + 1,
+      key: updatedGameGrid[gridPosition.y][gridPosition.x].key + 1,
       animateVariant,
     };
   }
@@ -159,6 +164,7 @@ export function handleNewWordFound(
   state: GameState,
   wordDataFoundOnBoard: WordData
 ): GameState {
+  // begins animations and sets up dispatches for after animations complete
   return {
     ...state,
     status: "loading",
@@ -184,7 +190,7 @@ export function handleNewWordFound(
           // calc needed animation coordinates
           if (!selectedLetter.ref.current || !targetCellData?.ref?.current)
             throw Error(
-              `Success animation start or target ref has not been set. Index: ${index}, Y: ${letterGridPosition.y}, X: ${letterGridPosition.x}`
+              `Success animation start or target ref has not been set.`
             );
           const startRect = selectedLetter.ref.current.getBoundingClientRect();
           const targetRect = targetCellData.ref.current.getBoundingClientRect();
@@ -195,6 +201,7 @@ export function handleNewWordFound(
           // return updated selected letters state
           return {
             ...selectedLetter,
+            key: selectedLetter.key,
             animateVariant: "moveToBoard",
             customVariantData: { index, animationOffset },
             dispatchOnAnimationComplete: [
@@ -225,7 +232,7 @@ export function handleSetBoardLetterShown(
         cellData.id === cellDataId
           ? {
               ...cellData,
-              id: cellData.id + 1,
+              key: cellData.key + 1,
               status: "shown",
               letter,
               animateVariant: "scaleBounce",

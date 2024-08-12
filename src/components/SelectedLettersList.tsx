@@ -27,8 +27,8 @@ export default function SelectedLetterList({
 
   return (
     <div className={`flex ${styles.tileGrid}`}>
-      {selectedLetters.map((selectedLetter, index) => (
-        <div key={index} className="pb-2 border-b-2 border-b-slate-200">
+      {selectedLetters.map((selectedLetter) => (
+        <div key={selectedLetter.key} className="pb-2 border-b-2 border-b-slate-200">
           <m.div
             className={`${styles.tile} ${styles[selectedLetter.status]}`}
             ref={selectedLetter.ref}

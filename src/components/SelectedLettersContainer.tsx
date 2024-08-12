@@ -6,17 +6,17 @@ import * as FramerVariants from "../utils/framerVariants.ts";
 import SelectedLettersList from "./SelectedLettersList.tsx";
 import SelectedLettersButtons from "./SelectedLettersButtons.tsx";
 
-interface SelectedLettersProps {
+interface SelectedLettersContainerProps {
   status: GameState["status"];
   selectedLettersData: GameState["selectedLettersData"];
   dispatch: React.Dispatch<Action>;
 }
 
-export default function SelectedLetters({
+export default function SelectedLettersContainer({
   status,
   selectedLettersData,
   dispatch,
-}: SelectedLettersProps) {
+}: SelectedLettersContainerProps) {
   const {
     currentSlotIndex,
     animateVariant = undefined,

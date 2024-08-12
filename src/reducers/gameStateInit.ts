@@ -38,6 +38,7 @@ function createGameGrid(
     () =>
       Array.from({ length: stageData.columnCount }, () => ({
         id: generateId(),
+        key: generateId(),
         status: "empty",
         letter: "",
         animateVariant: "",
@@ -68,6 +69,7 @@ function createSelectedLettersData(
     animateVariant: "",
     selectedLetters: Array.from({ length: stageData.letters.length }, () => ({
       id: generateId(),
+      key: generateId(),
       status: "hidden",
       letter: "",
       ref: React.createRef<HTMLDivElement>(),

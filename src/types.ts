@@ -14,6 +14,7 @@ type TileStatus = "shown" | "hidden" | "empty";
 type TileAnimateVariants =
   | ""
   | "scaleBounce"
+  | "scaleBounceBig"
   | "scaleHide"
   | "scaleShow"
   | "moveToBoard";
@@ -38,6 +39,7 @@ export interface StageData {
 
 export interface CellData {
   id: number;
+  key: number; // separate from id for animation resets
   status: TileStatus;
   letter: string;
   ref?: React.RefObject<HTMLDivElement>; // to get position data for animations
@@ -53,6 +55,7 @@ export interface SelectedLettersData {
 
 export interface SelectedLetter {
   id: number;
+  key: number; // separate from id for animation resets
   status: TileStatus;
   letter: string;
   ref: React.RefObject<HTMLDivElement>; // to get position data for animation

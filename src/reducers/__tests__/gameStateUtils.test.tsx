@@ -138,7 +138,7 @@ describe("handleBoardWordAnimationUpdate", {}, () => {
     "scaleBounce"
   );
 
-  test("Board word letter has animation set", {}, () => {
+  test("Board word letter animation updated", {}, () => {
     expect(updatedGameState.gameGrid[2][4].animateVariant).toBe("scaleBounce");
   });
 });

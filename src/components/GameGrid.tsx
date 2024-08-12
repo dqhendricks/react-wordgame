@@ -39,7 +39,7 @@ const GameGrid = React.memo(function ({
       {gameGrid.map((row) =>
         row.map((cellData) => (
           <m.div
-            key={cellData.id}
+            key={cellData.key}
             className={`${styles.tile} ${styles[cellData.status]}`}
             ref={cellData?.ref}
             animate={cellData.animateVariant}

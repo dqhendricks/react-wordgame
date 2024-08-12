@@ -74,7 +74,7 @@ function gameStateReducer(state: GameState, action: Action): GameState {
         return gameStateUtils.handleBoardWordAnimationUpdate(
           updatedState,
           wordDataFoundOnBoard,
-          "scaleBounce"
+          "scaleBounceBig"
         );
       }
       // new word found

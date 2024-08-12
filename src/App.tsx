@@ -3,7 +3,7 @@ import { useGameStateReducer } from "./reducers/useGameStateReducer.ts";
 import Header from "./components/Header.tsx";
 import VictoryMessage from "./components/VictoryMessage.tsx";
 import GameGrid from "./components/GameGrid.tsx";
-import SelectedLetters from "./components/SelectedLetters.tsx";
+import SelectedLettersContainer from "./components/SelectedLettersContainer.tsx";
 import AvailableLetters from "./components/AvailableLetters.tsx";
 
 function App() {
@@ -38,7 +38,7 @@ function App() {
         columnCount={stageData.columnCount}
         dispatch={dispatch}
       />
-      <SelectedLetters
+      <SelectedLettersContainer
         status={status}
         selectedLettersData={selectedLettersData}
         dispatch={dispatch}
