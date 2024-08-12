@@ -2,17 +2,17 @@ import type { GameState, AvailableLetter, Action } from "../types.ts";
 import styles from "../game.module.css";
 import { selectLetterAction } from "../reducers/gameStateActions.ts";
 
-interface AvailableLettersProps {
+interface AvailableLettersListProps {
   status: GameState["status"];
   availableLetters: GameState["availableLetters"];
   dispatch: React.Dispatch<Action>;
 }
 
-export default function AvailableLetters({
+export default function AvailableLettersList({
   status,
   availableLetters,
   dispatch,
-}: AvailableLettersProps) {
+}: AvailableLettersListProps) {
   function handleClick(selectedAvailableLetter: AvailableLetter) {
     if (status === "loading" || selectedAvailableLetter.disabled) return;
     dispatch(selectLetterAction(selectedAvailableLetter));

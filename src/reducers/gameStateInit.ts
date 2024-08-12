@@ -1,6 +1,4 @@
-import React from "react";
-
-import type { GameState, CellData } from "../types.ts";
+import type { GameState, GridTile } from "../types.ts";
 import { getLetterGridPosition } from "./gameStateUtils.ts";
 
 interface gameStateInitArgs {
@@ -46,15 +44,14 @@ function createGameGrid(
   );
   stageData.words.forEach((wordData) => {
     for (let i = 0; i < wordData.word.length; i++) {
-      const cellDataUpdate: Pick<CellData, "status" | "letter" | "ref"> = {
+      const gridTileUpdate: Pick<GridTile, "status" | "letter"> = {
         status: "hidden",
         letter: wordData.word[i],
-        ref: React.createRef<HTMLDivElement>(),
       };
       const gridPosition = getLetterGridPosition(wordData, i);
       gameGrid[gridPosition.y][gridPosition.x] = {
         ...gameGrid[gridPosition.y][gridPosition.x],
-        ...cellDataUpdate,
+        ...gridTileUpdate,
       };
     }
   });
@@ -72,7 +69,6 @@ function createSelectedLettersData(
       key: generateId(),
       status: "hidden",
       letter: "",
-      ref: React.createRef<HTMLDivElement>(),
       animateVariant: "",
     })),
   };

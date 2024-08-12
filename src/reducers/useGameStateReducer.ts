@@ -6,7 +6,6 @@ import { gameStateInit } from "./gameStateInit.ts";
 import * as gameStateUtils from "./gameStateUtils.ts";
 
 export function useGameStateReducer(initialStage: number) {
-  console.log(gameStateInit({ stage: 0, stagesData }));
   return useReducer(
     gameStateReducer,
     { stage: initialStage, stagesData },
@@ -22,6 +21,24 @@ function gameStateReducer(state: GameState, action: Action): GameState {
       if (wonTheGame)
         return gameStateUtils.handleSetGameStatus(state, "wonTheGame");
       return gameStateInit({ stage: nextStage, stagesData });
+    }
+
+    case "SET_GRID_TILE_VIEWPORT_POSITION": {
+      const { id, position } = action.payload;
+      return gameStateUtils.handleSetGridTileViewportPosition(
+        state,
+        id,
+        position
+      );
+    }
+
+    case "SET_SELECTED_LETTER_VIEWPORT_POSITION": {
+      const { id, position } = action.payload;
+      return gameStateUtils.handleSetSelectedLetterViewportPosition(
+        state,
+        id,
+        position
+      );
     }
 
     case "SELECT_LETTER": {
@@ -83,10 +100,10 @@ function gameStateReducer(state: GameState, action: Action): GameState {
     }
 
     case "SET_BOARD_LETTER_SHOWN": {
-      const { cellDataId, letter } = action.payload;
+      const { gridTileId, letter } = action.payload;
       return gameStateUtils.handleSetBoardLetterShown(
         state,
-        cellDataId,
+        gridTileId,
         letter
       );
     }

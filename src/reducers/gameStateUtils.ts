@@ -1,7 +1,7 @@
 import type {
   WordData,
   GameState,
-  CellData,
+  GridTile,
   SelectedLettersData,
   SelectedLetter,
   AvailableLetter,
@@ -22,6 +22,42 @@ export function getLetterGridPosition(
   return orientation === "x"
     ? { x: startPos.x + letterIndex, y: startPos.y }
     : { x: startPos.x, y: startPos.y + letterIndex };
+}
+
+export function handleSetGridTileViewportPosition(
+  state: GameState,
+  id: GridTile["id"],
+  position: GridTile["viewportPosition"]
+): GameState {
+  return {
+    ...state,
+    gameGrid: state.gameGrid.map((row) =>
+      row.map((gridTile) =>
+        gridTile.id === id
+          ? { ...gridTile, viewportPosition: position }
+          : gridTile
+      )
+    ),
+  };
+}
+
+export function handleSetSelectedLetterViewportPosition(
+  state: GameState,
+  id: SelectedLetter["id"],
+  position: SelectedLetter["viewportPosition"]
+): GameState {
+  return {
+    ...state,
+    selectedLettersData: {
+      ...state.selectedLettersData,
+      selectedLetters: state.selectedLettersData.selectedLetters.map(
+        (selectedLetter) =>
+          selectedLetter.id === id
+            ? { ...selectedLetter, viewportPosition: position }
+            : selectedLetter
+      ),
+    },
+  };
 }
 
 export function handleSelectLetter(
@@ -144,7 +180,7 @@ export function handleSetSelectedLetterHidden(
 export function handleBoardWordAnimationUpdate(
   state: GameState,
   wordData: WordData,
-  animateVariant: CellData["animateVariant"]
+  animateVariant: GridTile["animateVariant"]
 ): GameState {
   // update array references to signal need for rerenders
   const updatedGameGrid = state.gameGrid.map((row) => [...row]);
@@ -185,18 +221,23 @@ export function handleNewWordFound(
             wordDataFoundOnBoard,
             index
           );
-          const targetCellData =
+          const targetGridTile =
             state.gameGrid[letterGridPosition.y][letterGridPosition.x];
           // calc needed animation coordinates
-          if (!selectedLetter.ref.current || !targetCellData?.ref?.current)
+          if (
+            !selectedLetter.viewportPosition ||
+            !targetGridTile.viewportPosition
+          )
             throw Error(
-              `Success animation start or target ref has not been set.`
+              `Success animation start or target position has not been set.`
             );
-          const startRect = selectedLetter.ref.current.getBoundingClientRect();
-          const targetRect = targetCellData.ref.current.getBoundingClientRect();
           const animationOffset: Vector2D = {
-            x: targetRect.left - startRect.left,
-            y: targetRect.top - startRect.top,
+            x:
+              targetGridTile.viewportPosition.x -
+              selectedLetter.viewportPosition.x,
+            y:
+              targetGridTile.viewportPosition.y -
+              selectedLetter.viewportPosition.y,
           };
           // return updated selected letters state
           return {
@@ -207,7 +248,7 @@ export function handleNewWordFound(
             dispatchOnAnimationComplete: [
               setSelectedLetterHiddenAction(selectedLetter.id),
               setBoardLetterShownAction(
-                targetCellData.id,
+                targetGridTile.id,
                 selectedLetter.letter
               ),
             ],
@@ -221,23 +262,23 @@ export function handleNewWordFound(
 
 export function handleSetBoardLetterShown(
   state: GameState,
-  cellDataId: CellData["id"],
-  letter: CellData["letter"]
+  gridTileId: GridTile["id"],
+  letter: GridTile["letter"]
 ): GameState {
   return {
     ...state,
     // change board letter to status "shown" and animate
     gameGrid: state.gameGrid.map((row) =>
-      row.map((cellData) =>
-        cellData.id === cellDataId
+      row.map((gridTile) =>
+        gridTile.id === gridTileId
           ? {
-              ...cellData,
-              key: cellData.key + 1,
+              ...gridTile,
+              key: gridTile.key + 1,
               status: "shown",
               letter,
               animateVariant: "scaleBounce",
             }
-          : cellData
+          : gridTile
       )
     ),
   };

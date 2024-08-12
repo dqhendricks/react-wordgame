@@ -2,14 +2,35 @@ import type {
   Action,
   AvailableLetter,
   SelectedLetter,
-  CellData,
+  GridTile,
   GameState,
+  Vector2D,
 } from "../types.ts";
 
 export function loadNextStageAction(): Action {
   return {
     type: "LOAD_NEXT_STAGE",
     payload: null,
+  };
+}
+
+export function setGridTileViewportPositionAction(
+  id: GridTile["id"],
+  position: Vector2D
+): Action {
+  return {
+    type: "SET_GRID_TILE_VIEWPORT_POSITION",
+    payload: { id, position },
+  };
+}
+
+export function setSelectedLetterViewportPositionAction(
+  id: SelectedLetter["id"],
+  position: Vector2D
+): Action {
+  return {
+    type: "SET_SELECTED_LETTER_VIEWPORT_POSITION",
+    payload: { id, position },
   };
 }
 
@@ -45,13 +66,13 @@ export function submitGuessAction(): Action {
 }
 
 export function setBoardLetterShownAction(
-  cellDataId: CellData["id"],
-  letter: CellData["letter"]
+  gridTileId: GridTile["id"],
+  letter: GridTile["letter"]
 ): Action {
   return {
     type: "SET_BOARD_LETTER_SHOWN",
     payload: {
-      cellDataId,
+      gridTileId,
       letter,
     },
   };

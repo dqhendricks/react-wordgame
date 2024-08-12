@@ -1,5 +1,4 @@
 import { describe, test, expect } from "vitest";
-import { render } from "@testing-library/react";
 
 import { createMockGameState } from "./testUtils.ts";
 import * as gameStateUtils from "../gameStateUtils.ts";
@@ -50,11 +49,8 @@ describe("handleSelectLetter", {}, () => {
 
 describe("handleClearSelectedLetters", {}, () => {
   const gameState = createMockGameState();
-  gameState.selectedLettersData.selectedLetters[0] = {
-    ...gameState.selectedLettersData.selectedLetters[0],
-    letter: "i",
-    status: "shown",
-  };
+  gameState.selectedLettersData.selectedLetters[0].letter = "i";
+  gameState.selectedLettersData.selectedLetters[0].status = "shown";
   const updatedGameState = gameStateUtils.handleClearSelectedLetters(
     gameState,
     "shake"
@@ -107,11 +103,8 @@ describe("handleEnableAvailableLetters", {}, () => {
 
 describe("handleSetSelectedLetterHidden", {}, () => {
   const gameState = createMockGameState();
-  gameState.selectedLettersData.selectedLetters[0] = {
-    ...gameState.selectedLettersData.selectedLetters[0],
-    letter: "i",
-    status: "shown",
-  };
+  gameState.selectedLettersData.selectedLetters[0].letter = "i";
+  gameState.selectedLettersData.selectedLetters[0].status = "shown";
   const updatedGameState = gameStateUtils.handleSetSelectedLetterHidden(
     gameState,
     gameState.selectedLettersData.selectedLetters[0].id
@@ -145,27 +138,22 @@ describe("handleBoardWordAnimationUpdate", {}, () => {
 
 describe("handleNewWordFound", {}, () => {
   const gameState = createMockGameState();
-  gameState.selectedLettersData.selectedLetters[0] = {
-    ...gameState.selectedLettersData.selectedLetters[0],
-    letter: "c",
-    status: "shown",
-  };
-  render(<div ref={gameState.selectedLettersData.selectedLetters[0].ref} />);
-  gameState.selectedLettersData.selectedLetters[1] = {
-    ...gameState.selectedLettersData.selectedLetters[1],
-    letter: "a",
-    status: "shown",
-  };
-  render(<div ref={gameState.selectedLettersData.selectedLetters[1].ref} />);
-  gameState.selectedLettersData.selectedLetters[2] = {
-    ...gameState.selectedLettersData.selectedLetters[2],
-    letter: "t",
-    status: "shown",
-  };
-  render(<div ref={gameState.selectedLettersData.selectedLetters[2].ref} />);
-  render(<div ref={gameState.gameGrid[1][7].ref} />);
-  render(<div ref={gameState.gameGrid[1][8].ref} />);
-  render(<div ref={gameState.gameGrid[1][9].ref} />);
+  const mockPosition = { x: 0, y: 0 };
+  gameState.selectedLettersData.selectedLetters[0].letter = "c";
+  gameState.selectedLettersData.selectedLetters[0].status = "shown";
+  gameState.selectedLettersData.selectedLetters[0].viewportPosition =
+    mockPosition;
+  gameState.selectedLettersData.selectedLetters[1].letter = "a";
+  gameState.selectedLettersData.selectedLetters[1].status = "shown";
+  gameState.selectedLettersData.selectedLetters[1].viewportPosition =
+    mockPosition;
+  gameState.selectedLettersData.selectedLetters[2].letter = "t";
+  gameState.selectedLettersData.selectedLetters[2].status = "shown";
+  gameState.selectedLettersData.selectedLetters[2].viewportPosition =
+    mockPosition;
+  gameState.gameGrid[1][7].viewportPosition = mockPosition;
+  gameState.gameGrid[1][8].viewportPosition = mockPosition;
+  gameState.gameGrid[1][9].viewportPosition = mockPosition;
   const updatedGameState = gameStateUtils.handleNewWordFound(
     gameState,
     gameState.stageData.words[5]

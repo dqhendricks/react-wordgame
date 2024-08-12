@@ -5,6 +5,7 @@ import type { GameState, StageData, Action } from "../types.ts";
 import styles from "../game.module.css";
 import * as FramerVariants from "../utils/framerVariants.ts";
 import { loadNextStageAction } from "../reducers/gameStateActions.ts";
+import GameGridTile from "./GameGridTile.tsx";
 
 interface GameGridProps {
   status: GameState["status"];
@@ -37,16 +38,12 @@ const GameGrid = React.memo(function ({
       onAnimationComplete={animationCompleteHandler}
     >
       {gameGrid.map((row) =>
-        row.map((cellData) => (
-          <m.div
-            key={cellData.key}
-            className={`${styles.tile} ${styles[cellData.status]}`}
-            ref={cellData?.ref}
-            animate={cellData.animateVariant}
-            variants={FramerVariants.tile}
-          >
-            {cellData.status === "shown" ? cellData.letter : ""}
-          </m.div>
+        row.map((gridTile) => (
+          <GameGridTile
+            key={gridTile.key}
+            gridTile={gridTile}
+            dispatch={dispatch}
+          />
         ))
       )}
     </m.div>

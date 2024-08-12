@@ -79,14 +79,15 @@ export const selectedLettersContainer: Variants = {
 };
 
 export const board: Variants = {
+  // must end at normal position to get accurate grid tile positions within grid tile component mounts
   hide: {
-    scale: [1, 1.05, 1, 1.05, 1, 1.05, 1, 0.5, 0],
-    rotate: [0, 0, 0, 0, 0, 0, 0, 180, 360],
-    opacity: [1, 1, 1, 1, 1, 1, 1, 1, 0],
+    scale: [1, 1.05, 1, 1.05, 1, 1.05, 1, 0.5, 0, 1],
+    rotate: [0, 0, 0, 0, 0, 0, 0, 180, 360, 0],
+    opacity: [1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
     transition: {
       duration: 2,
       ease: "linear",
-      times: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1],
+      times: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 0.999, 1],
     },
   },
 

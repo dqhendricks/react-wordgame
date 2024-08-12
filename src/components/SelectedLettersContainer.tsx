@@ -3,7 +3,7 @@ import { m } from "framer-motion";
 import type { GameState, Action } from "../types.ts";
 import styles from "../game.module.css";
 import * as FramerVariants from "../utils/framerVariants.ts";
-import SelectedLettersList from "./SelectedLettersList.tsx";
+import SelectedLetterTile from "./SelectedLetterTile.tsx";
 import SelectedLettersButtons from "./SelectedLettersButtons.tsx";
 
 interface SelectedLettersContainerProps {
@@ -42,10 +42,15 @@ export default function SelectedLettersContainer({
       custom={selectedLettersData.currentSlotIndex + 1}
       onAnimationComplete={containerAnimationCompleteHandler}
     >
-      <SelectedLettersList
-        selectedLetters={selectedLetters}
-        dispatch={dispatch}
-      />
+      <div className={`flex ${styles.tileGrid}`}>
+        {selectedLetters.map((selectedLetter) => (
+          <SelectedLetterTile
+            key={selectedLetter.key}
+            selectedLetter={selectedLetter}
+            dispatch={dispatch}
+          />
+        ))}
+      </div>
       <SelectedLettersButtons
         status={status}
         currentSlotIndex={currentSlotIndex}

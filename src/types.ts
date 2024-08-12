@@ -3,7 +3,7 @@ export interface GameState {
   stage: number;
   totalStages: number;
   stageData: StageData;
-  gameGrid: CellData[][];
+  gameGrid: GridTile[][];
   selectedLettersData: SelectedLettersData;
   availableLetters: AvailableLetter[];
   foundWords: string[];
@@ -37,12 +37,12 @@ export interface StageData {
   words: WordData[];
 }
 
-export interface CellData {
+export interface GridTile {
   id: number;
   key: number; // separate from id for animation resets
   status: TileStatus;
   letter: string;
-  ref?: React.RefObject<HTMLDivElement>; // to get position data for animations
+  viewportPosition?: Vector2D; // for animations
   animateVariant: TileAnimateVariants;
 }
 
@@ -58,7 +58,7 @@ export interface SelectedLetter {
   key: number; // separate from id for animation resets
   status: TileStatus;
   letter: string;
-  ref: React.RefObject<HTMLDivElement>; // to get position data for animation
+  viewportPosition?: Vector2D; // for animations
   animateVariant: TileAnimateVariants;
   customVariantData?: number | MoveAnimationVariantData;
   dispatchOnAnimationComplete?: Action | Action[] | undefined;
@@ -78,6 +78,16 @@ export interface AvailableLetter {
 export interface LoadStageAction {
   type: "LOAD_NEXT_STAGE";
   payload: null;
+}
+
+export interface SetGridTileViewportPositionAction {
+  type: "SET_GRID_TILE_VIEWPORT_POSITION";
+  payload: { id: GridTile["id"]; position: Vector2D };
+}
+
+export interface SetSelectedLetterViewportPositionAction {
+  type: "SET_SELECTED_LETTER_VIEWPORT_POSITION";
+  payload: { id: SelectedLetter["id"]; position: Vector2D };
 }
 
 export interface SelectLetterAction {
@@ -107,7 +117,7 @@ export interface SubmitGuessAction {
 
 export interface SetBoardLetterShownAction {
   type: "SET_BOARD_LETTER_SHOWN";
-  payload: { cellDataId: CellData["id"]; letter: CellData["letter"] };
+  payload: { gridTileId: GridTile["id"]; letter: GridTile["letter"] };
 }
 
 export interface SetGameStatusAction {
@@ -122,6 +132,8 @@ export interface VictoryCheckAction {
 
 export type Action =
   | LoadStageAction
+  | SetGridTileViewportPositionAction
+  | SetSelectedLetterViewportPositionAction
   | SelectLetterAction
   | ClearSelectedLettersAction
   | SetSelectedLetterHiddenAction

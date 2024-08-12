@@ -4,7 +4,7 @@ import Header from "./components/Header.tsx";
 import VictoryMessage from "./components/VictoryMessage.tsx";
 import GameGrid from "./components/GameGrid.tsx";
 import SelectedLettersContainer from "./components/SelectedLettersContainer.tsx";
-import AvailableLetters from "./components/AvailableLetters.tsx";
+import AvailableLettersList from "./components/AvailableLettersList.tsx";
 
 function App() {
   const [
@@ -22,7 +22,6 @@ function App() {
 
   return (
     <main
-      key={stage}
       className={`relative flex flex-col items-center justify-center m-auto ${styles.elementContainer}`}
     >
       <Header
@@ -43,7 +42,7 @@ function App() {
         selectedLettersData={selectedLettersData}
         dispatch={dispatch}
       />
-      <AvailableLetters
+      <AvailableLettersList
         status={status}
         availableLetters={availableLetters}
         dispatch={dispatch}
