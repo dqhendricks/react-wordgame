@@ -20,25 +20,10 @@ const modalContainer: Variants = {
   },
 };
 
+// same as modalContainer animations, except adds y transform
 const modal: Variants = {
-  fadeIn: {
-    y: [-75, 0],
-    opacity: [0, 1],
-    transition: {
-      duration: 0.3,
-      ease: "easeOut",
-      times: [0, 1],
-    },
-  },
-  fadeOut: {
-    y: [0, -75],
-    opacity: [1, 0],
-    transition: {
-      duration: 0.3,
-      ease: "easeIn",
-      times: [0, 1],
-    },
-  },
+  fadeIn: { ...modalContainer.fadeIn, y: [-75, 0] },
+  fadeOut: { ...modalContainer.fadeOut, y: [0, -75] },
 };
 
 interface ModalProps {
@@ -57,16 +42,16 @@ export default function Modal({
 
   function handleOnAnimationComplete() {
     if (!hide) return;
-    handleClose();
+    handleClose(); // close after fade out
     setHide(false);
   }
 
   function handleHide() {
-    setHide(true);
+    setHide(true); // fade out
   }
 
   function handleModalClick(event: React.MouseEvent<HTMLDivElement>) {
-    event.stopPropagation();
+    event.stopPropagation(); // prevents closing modal on click
   }
 
   if (!show) return null;
@@ -79,11 +64,11 @@ export default function Modal({
       onAnimationComplete={handleOnAnimationComplete}
     >
       <m.div
-        className="rounded-xl overflow-hidden bg-slate-700 flex flex-col min-h-48 m-2"
+        className="rounded-xl overflow-hidden flex flex-col min-h-48 m-2"
         onClick={handleModalClick}
         variants={modal}
       >
-        <div className="bg-slate-600 flex justify-between p-2 text-lg">
+        <div className="bg-slate-600 flex justify-between p-2 text-lg bg-opacity-80">
           <div className="px-2">{title}</div>
           <div>
             <button
@@ -94,7 +79,7 @@ export default function Modal({
             </button>
           </div>
         </div>
-        <div className="flex items-center justify-center flex-1 p-4">
+        <div className="flex items-center justify-center flex-1 p-4 bg-slate-700 bg-opacity-80">
           {children}
         </div>
       </m.div>

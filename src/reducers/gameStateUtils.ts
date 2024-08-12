@@ -96,7 +96,7 @@ export function handleClearSelectedLetters(
 export function handleEnableAvailableLetters(state: GameState): GameState {
   return {
     ...state,
-    // reset all selected letters
+    // reset selected letters data
     selectedLettersData: {
       ...state.selectedLettersData,
       currentSlotIndex: 0,
@@ -184,7 +184,7 @@ export function handleNewWordFound(
           // calc needed animation coordinates
           if (!selectedLetter.ref.current || !targetCellData?.ref?.current)
             throw Error(
-              "Success animation start or target ref has not been set."
+              `Success animation start or target ref has not been set. Index: ${index}, Y: ${letterGridPosition.y}, X: ${letterGridPosition.x}`
             );
           const startRect = selectedLetter.ref.current.getBoundingClientRect();
           const targetRect = targetCellData.ref.current.getBoundingClientRect();

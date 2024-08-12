@@ -1,11 +1,16 @@
 import { useReducer } from "react";
 
 import type { WordData, GameState, Action, SelectedLetter } from "../types.ts";
+import { stagesData } from "../assets/stagesData.ts";
 import { gameStateInit } from "./gameStateInit.ts";
 import * as gameStateUtils from "./gameStateUtils.ts";
 
 export function useGameStateReducer(initialStage: number) {
-  return useReducer(gameStateReducer, initialStage, gameStateInit);
+  return useReducer(
+    gameStateReducer,
+    { stage: initialStage, stagesData },
+    gameStateInit
+  );
 }
 
 function gameStateReducer(state: GameState, action: Action): GameState {
@@ -15,7 +20,7 @@ function gameStateReducer(state: GameState, action: Action): GameState {
       const wonTheGame = nextStage === state.totalStages;
       if (wonTheGame)
         return gameStateUtils.handleSetGameStatus(state, "wonTheGame");
-      return gameStateInit(nextStage);
+      return gameStateInit({ stage: nextStage, stagesData });
     }
 
     case "SELECT_LETTER": {

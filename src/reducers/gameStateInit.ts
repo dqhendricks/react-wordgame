@@ -1,16 +1,23 @@
 import React from "react";
 
 import type { GameState, CellData } from "../types.ts";
-import { stagesData } from "../assets/stagesData.ts";
 import { getLetterGridPosition } from "./gameStateUtils.ts";
 
-export function gameStateInit(stage: GameState["stage"]): GameState {
-  const stageData = getStageData(stage);
+interface gameStateInitArgs {
+  stage: GameState["stage"];
+  stagesData: GameState["stageData"][];
+}
+
+export function gameStateInit({
+  stage,
+  stagesData,
+}: gameStateInitArgs): GameState {
+  const stageData = stagesData[stage];
   // return initial state
   return {
     status: "active",
     stage,
-    totalStages: getTotalStages(),
+    totalStages: stagesData.length,
     stageData,
     gameGrid: createGameGrid(stageData),
     selectedLettersData: createSelectedLettersData(stageData),
@@ -21,14 +28,6 @@ export function gameStateInit(stage: GameState["stage"]): GameState {
 
 function generateId() {
   return Math.random();
-}
-
-function getStageData(stage: GameState["stage"]) {
-  return stagesData[stage];
-}
-
-function getTotalStages() {
-  return stagesData.length;
 }
 
 function createGameGrid(
