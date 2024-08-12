@@ -1,7 +1,7 @@
 # react-wordgame
-A word game created from scratch using react, tailwind, and framer-motion.
+I created this word game from scratch using react, tailwind, and framer-motion.
 
-What better way to show expertise in using React and app design than a crossword puzzle game? Built in four days, this game was my first ever attempt at using framer-motion. I have to say it was a lot of fun, though there were a few unexpected quirks in the framer-motion library I had to find a way to work around. I seem to have discovered a bug, where, if an animation strictly animates x and y coordinates, any set onAnimationComplete handlers will run immediately instead of waiting until the animation completes (for this I ended up having to add a scale parameter to the animation variant, that did nothing to the animation, but fixed the onAnimationComplete bug 😅).
+This was my first attempt at using framer-motion for animations, which was a ton of fun. Using Framer Motion and Tailwind together made UI development an incredibly fast process. I started with what data I thought I would need to load a game stage, which I originally put into a JSON file, but eventually moved to TS so I could easily type it. I then started to build a reducer to load the initial game state, and from there, the components and actions.
 
 Give the game a try now by [clicking here](https://dustinhendricks.com/wordgame).
 
