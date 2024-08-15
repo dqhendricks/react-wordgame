@@ -46,7 +46,7 @@ export default function GameGridTile({
       animate={gridTile.animateVariant}
       variants={FramerVariants.tile}
     >
-      {gridTile.status === "shown" ? gridTile.letter : ""}
+      {gridTile.status !== "hidden" ? gridTile.letter : ""}
     </m.div>
   );
 }

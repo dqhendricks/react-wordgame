@@ -101,10 +101,11 @@ function gameStateReducer(state: GameState, action: Action): GameState {
 
     case "SET_BOARD_LETTER_SHOWN": {
       const { gridTileId, letter } = action.payload;
-      return gameStateUtils.handleSetBoardLetterShown(
+      return gameStateUtils.handleSetBoardLetterStatus(
         state,
         gridTileId,
-        letter
+        letter,
+        "shown"
       );
     }
 
@@ -122,6 +123,14 @@ function gameStateReducer(state: GameState, action: Action): GameState {
         // stage victory achieved!
         return gameStateUtils.handleSetGameStatus(state, "closingStage");
       }
+    }
+
+    case "SHUFFLE_AVAILABLE_LETTERS": {
+      return gameStateUtils.shuffleAvailableLetters(state);
+    }
+
+    case "REVEAL_HINT": {
+      return gameStateUtils.revealHint(state);
     }
 
     default:

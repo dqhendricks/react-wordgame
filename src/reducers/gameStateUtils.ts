@@ -24,6 +24,15 @@ export function getLetterGridPosition(
     : { x: startPos.x, y: startPos.y + letterIndex };
 }
 
+function getLetterGridTile(
+  state: GameState,
+  wordData: WordData,
+  letterIndex: number
+): GridTile {
+  const gridPosition = getLetterGridPosition(wordData, letterIndex);
+  return state.gameGrid[gridPosition.y][gridPosition.x];
+}
+
 export function handleSetGridTileViewportPosition(
   state: GameState,
   id: GridTile["id"],
@@ -86,14 +95,18 @@ export function handleSelectLetter(
       ),
     },
     // disable available letter
-    availableLetters: state.availableLetters.map((availableLetter) =>
-      availableLetter.id === selectedAvailableLetter.id
-        ? {
-            ...selectedAvailableLetter,
-            disabled: true,
-          }
-        : availableLetter
-    ),
+    availableLettersData: {
+      ...state.availableLettersData,
+      availableLetters: state.availableLettersData.availableLetters.map(
+        (availableLetter) =>
+          availableLetter.id === selectedAvailableLetter.id
+            ? {
+                ...selectedAvailableLetter,
+                disabled: true,
+              }
+            : availableLetter
+      ),
+    },
   };
 }
 
@@ -143,10 +156,15 @@ export function handleEnableAvailableLetters(state: GameState): GameState {
       dispatchOnAnimationComplete: undefined,
     },
     // enable all available letters
-    availableLetters: state.availableLetters.map((availableLetter) => ({
-      ...availableLetter,
-      disabled: false,
-    })),
+    availableLettersData: {
+      ...state.availableLettersData,
+      availableLetters: state.availableLettersData.availableLetters.map(
+        (availableLetter) => ({
+          ...availableLetter,
+          disabled: false,
+        })
+      ),
+    },
   };
 }
 
@@ -216,13 +234,11 @@ export function handleNewWordFound(
       selectedLetters: state.selectedLettersData.selectedLetters.map(
         (selectedLetter, index) => {
           if (selectedLetter.status !== "shown") return selectedLetter;
-          // get target cell on gameGrid for this letter
-          const letterGridPosition = getLetterGridPosition(
+          const targetGridTile = getLetterGridTile(
+            state,
             wordDataFoundOnBoard,
             index
           );
-          const targetGridTile =
-            state.gameGrid[letterGridPosition.y][letterGridPosition.x];
           // calc needed animation offset
           if (
             !selectedLetter.viewportPosition ||
@@ -266,10 +282,11 @@ function getVectorOffset(
   };
 }
 
-export function handleSetBoardLetterShown(
+export function handleSetBoardLetterStatus(
   state: GameState,
   gridTileId: GridTile["id"],
-  letter: GridTile["letter"]
+  letter: GridTile["letter"],
+  status: GridTile["status"]
 ): GameState {
   return {
     ...state,
@@ -280,7 +297,7 @@ export function handleSetBoardLetterShown(
           ? {
               ...gridTile,
               key: gridTile.key + 1,
-              status: "shown",
+              status: status,
               letter,
               animateVariant: "scaleBounce",
             }
@@ -298,4 +315,55 @@ export function handleSetGameStatus(
     ...state,
     status: newStatus,
   };
+}
+
+export function shuffleAvailableLetters(state: GameState): GameState {
+  return {
+    ...state,
+    availableLettersData: {
+      key: state.availableLettersData.key + 1,
+      animateVariant: "shake",
+      availableLetters: shuffleArray([
+        ...state.availableLettersData.availableLetters,
+      ]),
+    },
+  };
+}
+
+function shuffleArray<T>(input: T[]): T[] {
+  for (let i = input.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [input[i], input[j]] = [input[j], input[i]];
+  }
+  return input;
+}
+
+export function revealHint(state: GameState): GameState {
+  const gridTile = findRandomHintTile(state);
+  const updatedState = handleSetBoardLetterStatus(
+    state,
+    gridTile.id,
+    gridTile.letter,
+    "disabled"
+  );
+  return {
+    ...updatedState,
+    hints: state.hints - 1,
+  };
+}
+
+export function findRandomHintTile(state: GameState): GridTile {
+  const availableWords: WordData[] = state.stageData.words.filter(
+    (wordData) => !state.foundWords.includes(wordData.word)
+  );
+  const randomWord: WordData =
+    availableWords[Math.floor(Math.random() * availableWords.length)];
+  const unguessedGridTiles: GridTile[] = randomWord.word
+    .split("")
+    .map((_, index) => getLetterGridTile(state, randomWord, index))
+    .filter((gridTile) => gridTile.status === "hidden");
+  if (unguessedGridTiles.length === 0) return findRandomHintTile(state);
+  return unguessedGridTiles[
+    Math.floor(Math.random() * unguessedGridTiles.length)
+  ];
 }

@@ -29,17 +29,19 @@ describe("handleSelectLetter", {}, () => {
   const gameState = createMockGameState();
   const updatedGameState = gameStateUtils.handleSelectLetter(
     gameState,
-    gameState.availableLetters[2]
+    gameState.availableLettersData.availableLetters[2]
   );
 
   test("Available letter disabled", {}, () => {
-    expect(updatedGameState.availableLetters[2].disabled).toBe(true);
+    expect(
+      updatedGameState.availableLettersData.availableLetters[2].disabled
+    ).toBe(true);
   });
 
   test("Available letter added to selected letters", {}, () => {
     expect(updatedGameState.selectedLettersData.currentSlotIndex).toBe(1);
     expect(updatedGameState.selectedLettersData.selectedLetters[0].letter).toBe(
-      gameState.availableLetters[2].letter
+      gameState.availableLettersData.availableLetters[2].letter
     );
     expect(updatedGameState.selectedLettersData.selectedLetters[0].status).toBe(
       "shown"
@@ -88,7 +90,7 @@ describe("handleClearSelectedLetters", {}, () => {
 describe("handleEnableAvailableLetters", {}, () => {
   const gameState = createMockGameState();
   gameState.selectedLettersData.currentSlotIndex = 1;
-  gameState.availableLetters[2].disabled = true;
+  gameState.availableLettersData.availableLetters[2].disabled = true;
   const updatedGameState =
     gameStateUtils.handleEnableAvailableLetters(gameState);
 
@@ -97,7 +99,9 @@ describe("handleEnableAvailableLetters", {}, () => {
   });
 
   test("Available letters enabled", {}, () => {
-    expect(updatedGameState.availableLetters[0].disabled).toBe(false);
+    expect(
+      updatedGameState.availableLettersData.availableLetters[0].disabled
+    ).toBe(false);
   });
 });
 
@@ -198,10 +202,11 @@ describe("handleNewWordFound", {}, () => {
 
 describe("handleSetBoardLetterShown", {}, () => {
   const gameState = createMockGameState();
-  const updatedGameState = gameStateUtils.handleSetBoardLetterShown(
+  const updatedGameState = gameStateUtils.handleSetBoardLetterStatus(
     gameState,
     gameState.gameGrid[1][7].id,
-    "c"
+    "c",
+    "shown"
   );
 
   test("Board letter status set to shown", {}, () => {
@@ -222,5 +227,20 @@ describe("handleSetGameStatus", {}, () => {
 
   test("Game status updated", {}, () => {
     expect(updatedGameState.status).toBe("wonTheGame");
+  });
+});
+
+describe("findRandomHintTile", {}, () => {
+  const gameState = createMockGameState();
+  function areRandomHintTilesStatusHidden() {
+    for (let i = 0; i < 20; i++) {
+      if (gameStateUtils.findRandomHintTile(gameState).status !== "hidden")
+        return false;
+    }
+    return true;
+  }
+
+  test("Random hint tiles have status of hidden", {}, () => {
+    expect(areRandomHintTilesStatusHidden()).toBe(true);
   });
 });

@@ -1,5 +1,12 @@
+import React from "react";
+
 import type { GameState, Action } from "../types.ts";
 import styles from "../game.module.css";
+import {
+  QuestionLgIcon,
+  LightbulbIcon,
+  ShuffleIcon,
+} from "../assets/icons.tsx";
 import Modal from "./Modal.tsx";
 import { setGameStatusAction } from "../reducers/gameStateActions.ts";
 
@@ -10,7 +17,7 @@ interface HeaderProps {
   dispatch: React.Dispatch<Action>;
 }
 
-export default function Header({
+const Header = React.memo(function ({
   status,
   stage,
   totalStages,
@@ -31,10 +38,10 @@ export default function Header({
         Stage: {`${stage + 1}/${totalStages}`}
       </div>
       <button
-        className={`absolute top-2 right-2 text-slate-600 ${styles.tile} ${styles.available}`}
+        className={`absolute top-3 right-3 text-slate-600 ${styles.tile} ${styles.available}`}
         onClick={handleShowHelp}
       >
-        ?
+        <QuestionLgIcon />
       </button>
       <Modal
         title="How to play"
@@ -51,8 +58,26 @@ export default function Header({
             Press <span className="text-red-500">✗</span> to clear your guess
             and try again.
           </li>
+          <li>
+            Press{" "}
+            <span className="text-blue-500">
+              <ShuffleIcon />
+            </span>{" "}
+            to shuffle the available letters.
+          </li>
+          <li>
+            Press{" "}
+            <span className="text-yellow-500">
+              <LightbulbIcon />
+            </span>{" "}
+            to reveal a crossword hint.
+          </li>
         </ul>
       </Modal>
     </div>
   );
-}
+});
+
+Header.displayName = "Header";
+
+export default Header;

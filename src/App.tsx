@@ -4,7 +4,7 @@ import Header from "./components/Header.tsx";
 import VictoryMessage from "./components/VictoryMessage.tsx";
 import GameGrid from "./components/GameGrid.tsx";
 import SelectedLettersContainer from "./components/SelectedLettersContainer.tsx";
-import AvailableLettersList from "./components/AvailableLettersList.tsx";
+import AvailableLettersContainer from "./components/AvailableLettersContainer.tsx";
 
 function App() {
   const [
@@ -15,7 +15,8 @@ function App() {
       stageData,
       gameGrid,
       selectedLettersData,
-      availableLetters,
+      availableLettersData,
+      hints,
     },
     dispatch,
   ] = useGameStateReducer(0);
@@ -42,9 +43,10 @@ function App() {
         selectedLettersData={selectedLettersData}
         dispatch={dispatch}
       />
-      <AvailableLettersList
+      <AvailableLettersContainer
         status={status}
-        availableLetters={availableLetters}
+        availableLettersData={availableLettersData}
+        hints={hints}
         dispatch={dispatch}
       />
     </main>

@@ -5,11 +5,12 @@ export interface GameState {
   stageData: StageData;
   gameGrid: GridTile[][];
   selectedLettersData: SelectedLettersData;
-  availableLetters: AvailableLetter[];
+  availableLettersData: AvailableLettersData;
   foundWords: string[];
+  hints: number;
 }
 
-type TileStatus = "shown" | "hidden" | "empty";
+type TileStatus = "shown" | "hidden" | "empty" | "disabled";
 
 type TileAnimateVariants =
   | ""
@@ -67,6 +68,12 @@ export interface SelectedLetter {
 export interface MoveAnimationVariantData {
   index: number;
   animationOffset: Vector2D;
+}
+
+export interface AvailableLettersData {
+  key: number;
+  animateVariant: "" | "shake";
+  availableLetters: AvailableLetter[];
 }
 
 export interface AvailableLetter {
@@ -130,6 +137,16 @@ export interface VictoryCheckAction {
   payload: null;
 }
 
+export interface ShuffleAvailableLettersAction {
+  type: "SHUFFLE_AVAILABLE_LETTERS";
+  payload: null;
+}
+
+export interface RevealHintAction {
+  type: "REVEAL_HINT";
+  payload: null;
+}
+
 export type Action =
   | LoadStageAction
   | SetGridTileViewportPositionAction
@@ -141,4 +158,6 @@ export type Action =
   | SubmitGuessAction
   | SetBoardLetterShownAction
   | SetGameStatusAction
-  | VictoryCheckAction;
+  | VictoryCheckAction
+  | ShuffleAvailableLettersAction
+  | RevealHintAction;

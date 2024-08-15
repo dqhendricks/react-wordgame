@@ -19,8 +19,9 @@ export function gameStateInit({
     stageData,
     gameGrid: createGameGrid(stageData),
     selectedLettersData: createSelectedLettersData(stageData),
-    availableLetters: creatAvailableLetters(stageData),
+    availableLettersData: creatAvailableLettersData(stageData),
     foundWords: [],
+    hints: 3,
   };
 }
 
@@ -74,12 +75,16 @@ function createSelectedLettersData(
   };
 }
 
-function creatAvailableLetters(
+function creatAvailableLettersData(
   stageData: GameState["stageData"]
-): GameState["availableLetters"] {
-  return stageData.letters.map((letter) => ({
-    id: generateId(),
-    letter,
-    disabled: false,
-  }));
+): GameState["availableLettersData"] {
+  return {
+    key: 0,
+    animateVariant: "",
+    availableLetters: stageData.letters.map((letter) => ({
+      id: generateId(),
+      letter,
+      disabled: false,
+    })),
+  };
 }

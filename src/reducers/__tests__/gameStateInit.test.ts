@@ -46,7 +46,7 @@ describe("gameStateInit", {}, () => {
     expect(gameState.totalStages).toBe(2);
     expect(gameState.stageData.columnCount).toBe(9);
     expect(gameState.selectedLettersData.currentSlotIndex).toBe(0);
-    expect(gameState.availableLetters[2].letter).toBe("e");
+    expect(gameState.availableLettersData.availableLetters[2].letter).toBe("e");
   });
 
   test("gameGrid state", {}, () => {

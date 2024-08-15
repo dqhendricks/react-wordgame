@@ -91,3 +91,17 @@ export function victoryCheckAction(): Action {
     payload: null,
   };
 }
+
+export function shuffleAvailableLettersAction(): Action {
+  return {
+    type: "SHUFFLE_AVAILABLE_LETTERS",
+    payload: null,
+  };
+}
+
+export function revealHintAction(): Action {
+  return {
+    type: "REVEAL_HINT",
+    payload: null,
+  };
+}

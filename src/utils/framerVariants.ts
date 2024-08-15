@@ -53,7 +53,7 @@ export const tile: Variants = {
   }),
 };
 
-export const selectedLettersContainer: Variants = {
+export const letterContainer: Variants = {
   waitForClearSelected: (totalLetters: number) => ({
     scale: [1, 1.0001, 1],
     transition: {
@@ -61,7 +61,7 @@ export const selectedLettersContainer: Variants = {
     },
   }),
 
-  shake: (totalLetters: number) => ({
+  shake: (totalLetters: number = 3) => ({
     x: [0, -20, 20, -10, 10, 0],
     transition: {
       duration: 0.35 + totalLetters * 0.1,

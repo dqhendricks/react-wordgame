@@ -1,3 +1,4 @@
+import React from "react";
 import { m } from "framer-motion";
 
 import type { GameState, Action } from "../types.ts";
@@ -12,7 +13,7 @@ interface SelectedLettersContainerProps {
   dispatch: React.Dispatch<Action>;
 }
 
-export default function SelectedLettersContainer({
+const SelectedLettersContainer = React.memo(function ({
   status,
   selectedLettersData,
   dispatch,
@@ -38,7 +39,7 @@ export default function SelectedLettersContainer({
     <m.div
       className={`flex pt-3 ${styles.elementContainer}`}
       animate={animateVariant}
-      variants={FramerVariants.selectedLettersContainer}
+      variants={FramerVariants.letterContainer}
       custom={selectedLettersData.currentSlotIndex + 1}
       onAnimationComplete={containerAnimationCompleteHandler}
     >
@@ -58,4 +59,8 @@ export default function SelectedLettersContainer({
       />
     </m.div>
   );
-}
+});
+
+SelectedLettersContainer.displayName = "SelectedLettersContainer";
+
+export default SelectedLettersContainer;

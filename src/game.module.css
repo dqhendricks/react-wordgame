@@ -33,7 +33,7 @@
   @apply xs:w-8 xs:h-8 xs:text-2xl xs:rounded-md;
   @apply sm:w-10 sm:h-10 sm:text-3xl sm:rounded-lg;
   @apply md:w-12 md:h-12 md:text-4xl md:rounded-xl;
-  @apply flex items-center justify-center font-bold text-pretty uppercase;
+  @apply flex items-center justify-center text-pretty font-bold uppercase;
 }
 
 .tile.shown {
