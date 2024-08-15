@@ -223,7 +223,7 @@ export function handleNewWordFound(
           );
           const targetGridTile =
             state.gameGrid[letterGridPosition.y][letterGridPosition.x];
-          // calc needed animation coordinates
+          // calc needed animation offset
           if (
             !selectedLetter.viewportPosition ||
             !targetGridTile.viewportPosition
@@ -231,14 +231,10 @@ export function handleNewWordFound(
             throw Error(
               `Success animation start or target position has not been set.`
             );
-          const animationOffset: Vector2D = {
-            x:
-              targetGridTile.viewportPosition.x -
-              selectedLetter.viewportPosition.x,
-            y:
-              targetGridTile.viewportPosition.y -
-              selectedLetter.viewportPosition.y,
-          };
+          const animationOffset = getVectorOffset(
+            selectedLetter.viewportPosition,
+            targetGridTile.viewportPosition
+          );
           // return updated selected letters state
           return {
             ...selectedLetter,
@@ -257,6 +253,16 @@ export function handleNewWordFound(
       ),
     },
     foundWords: [...state.foundWords, wordDataFoundOnBoard.word],
+  };
+}
+
+function getVectorOffset(
+  startVector: Vector2D,
+  targetVector: Vector2D
+): Vector2D {
+  return {
+    x: targetVector.x - startVector.x,
+    y: targetVector.y - startVector.y,
   };
 }
 
