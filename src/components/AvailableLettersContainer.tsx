@@ -51,6 +51,7 @@ const AvailableLettersContainer = React.memo(function ({
       <button
         className={`text-slate-600 ${styles.tile} ${styles.available}`}
         onClick={handleShuffleClick}
+        title="Shuffle"
       >
         <ShuffleIcon />
       </button>
@@ -73,6 +74,7 @@ const AvailableLettersContainer = React.memo(function ({
           hintsEnabled ? styles.available : "cursor-default"
         }`}
         onClick={handleHintClick}
+        title="Hint"
       >
         <LightbulbIcon />
         <span className="absolute top-0 right-0 translate-x-1/4 -translate-y-1/4 sm:translate-x-0 sm:-translate-y-0 text-xs sm:text-sm">

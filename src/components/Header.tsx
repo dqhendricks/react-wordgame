@@ -40,6 +40,7 @@ const Header = React.memo(function ({
       <button
         className={`absolute top-3 right-3 text-slate-600 ${styles.tile} ${styles.available}`}
         onClick={handleShowHelp}
+        title="Tutorial"
       >
         <QuestionLgIcon />
       </button>

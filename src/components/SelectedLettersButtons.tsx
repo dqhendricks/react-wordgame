@@ -36,6 +36,7 @@ export default function SelectedLettersButtons({
           submitButtonEnabled ? styles.accept : styles.disabled
         }`}
         onClick={submitGuessHandler}
+        title="Accept"
       >
         ✓
       </button>
@@ -44,6 +45,7 @@ export default function SelectedLettersButtons({
           clearButtonEnabled ? styles.reject : styles.disabled
         }`}
         onClick={clearSelectedLettersHandler}
+        title="Clear"
       >
         ✗
       </button>
