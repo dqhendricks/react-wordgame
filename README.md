@@ -7,4 +7,4 @@ Give the game a try now by [clicking here](https://dustinhendricks.com/wordgame)
 
 Cheers!
 
-![A screenshot of "word game"](https://dustinhendricks.com/wordgame/screenshot.jpg)
+![A screenshot of "word game"](https://dustinhendricks.com/wordgame/screenshot.png)
